@@ -13,7 +13,7 @@ namespace RentAndDrive.Models.Alugueres.DAL
         #region ID
         private static string gerarId()
         {
-            string serie = "ALRD/" + DateTime.Now.Year + "/";
+            string serie = "ALRD" + DateTime.Now.Year;
             DataDbContext ctx = new DataDbContext();
             string id = ctx.pessoas.Where(x => x.id.Contains(serie)).Max(x => x.id);
             if (id == null)

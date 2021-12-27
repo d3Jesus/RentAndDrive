@@ -49,7 +49,7 @@ namespace RentAndDrive.Controllers
             return View(DalAluguer.CarregarAluguers().Where(a => a.estado == "Activo").ToList());
         }
 
-        [HttpPost]
+        //[HttpPost]
         public ActionResult CancelarAluguer(string al)
         {
             if(al == null || al == "" || al == "rowId")
