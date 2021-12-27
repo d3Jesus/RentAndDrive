@@ -1,0 +1,38 @@
+﻿@model RentAndDrive.Models.Viaturas.Mdl.Viatura
+@{
+    ViewBag.Title = "Eliminar Viatura";
+}
+
+
+@using (Html.BeginForm("EliminarViatura", "Viaturas", FormMethod.Post))
+{
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+            <h3 class="modal-title">Eliminar Viatura</h3>
+        </div>
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <div class="container-fluid">
+                <h5>
+                    Tem certeza que deseja eliminar a viatura com matricula: <strong> @Model.matricula</strong>?
+                </h5>
+                <div class="text-center">
+                    <small style="width:100%; font-size: 16px;"><b> Atenção: </b>Ao confirmar, estará a eliminar definitivamente o registro desta viatura.</small>
+                </div>
+                @Html.HiddenFor(model => model.matricula)
+                @Html.HiddenFor(model => model.cor)
+                @Html.HiddenFor(model => model.marca)
+                @Html.HiddenFor(model => model.modelo)
+                @Html.HiddenFor(model => model.valorAluguer)
+                @Html.HiddenFor(model => model.estado)
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">N&atilde;o</button>
+            <button type="submit" class="btn btn-success">Sim</button>
+        </div>
+    </div>
+}
+
+
+

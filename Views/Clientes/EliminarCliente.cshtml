@@ -1,0 +1,32 @@
+﻿@model RentAndDrive.Models.Pessoas.Mdl.Cliente.VwCliente
+@{
+    ViewBag.Title = "Eliminar Cliente";
+}
+
+
+@using (Html.BeginForm("EliminarCliente", "Clientes", FormMethod.Post))
+{
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+            <h3 class="modal-title">Eliminar Cliente</h3>
+        </div>
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <div class="container-fluid">
+                <h5>
+                    Tem certeza que deseja eliminar a Cliente com o nome: <strong> @Model.nome</strong>?
+                </h5>
+                <div class="text-center">
+                    <small style="width:100%; font-size: 16px;"><b> Atenção: </b>Ao confirmar, estará a eliminar definitivamente o registro deste cliente.</small>
+                </div>
+                @Html.HiddenFor(model => model.id)
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">N&atilde;o</button>
+            <button type="submit" class="btn btn-success">Sim</button>
+        </div>
+    </div>
+}
+
+

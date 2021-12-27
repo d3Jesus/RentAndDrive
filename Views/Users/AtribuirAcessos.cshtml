@@ -1,0 +1,88 @@
+﻿@model IEnumerable<RentAndDrive.Models.Users.Mdl.VwRoleDescription>
+@{
+    ViewBag.Title = "Atribuir Acessos";
+    string userId = TempData["UserId"] as string;
+    string id = TempData["Id"] as string;
+    TempData["Id"] = id;
+
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var table = $('#dataTable').DataTable({
+            paginate: true,
+            autoWidth: false,
+            select: true,
+            //Necessario desativar o scrollX e scrollY para acertar o header com o body.
+            //scrollResize: true,
+            //scrollY: 300
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Procurar ...",
+            }
+        });
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    });
+</script>
+
+
+
+@using (Html.BeginForm("AtribuirAcessos", "Users", new { userId }, FormMethod.Post, new { id = "formSaveRoles" }))
+{
+    <div class="card mb-4">
+        <div class="card mb-2">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Atribuir Acessos
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered" id="dataTable" style="width:100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Acesso</th>
+                                <th style="max-width: 20%">Seleccionar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="font-size:11px;">@item.Descricao</td>
+                                    <td style="font-size:11px;">
+                                        <input type="checkbox" id="CheckSelect" name="selectedRoles" value="@item.IdAcesso" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <center>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </center>
+            </div>
+        </div>
+    </div>
+}

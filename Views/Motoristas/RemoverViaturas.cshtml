@@ -1,0 +1,91 @@
+﻿@model IEnumerable<RentAndDrive.Models.Viaturas.Mdl.VwViatura>
+@{
+    ViewBag.Title = "Remover Viaturas";
+    string nomeMotorista = TempData["Motorista"] as string;
+    string motorista = TempData["IdMotorista"] as string;
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $('#dataTable').DataTable({
+            paginate: true,
+            autoWidth: false,
+            select: true,
+            //Necessario desativar o scrollX e scrollY para acertar o header com o body.
+            //scrollResize: true,
+            //scrollY: 300
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Procurar ...",
+            }
+        });
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    });
+</script>
+
+
+
+@using (Html.BeginForm("RemoverViaturas", "Motoristas", new { motorista }, FormMethod.Post, new { id = "formSaveRoles" }))
+{
+    <div class="card mb-4">
+        <div class="card mb-2">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Remover Viaturas Atribuídas ao Motorista - @nomeMotorista
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+
+
+                    <table class="table table-hover table-bordered" id="dataTable" style="width:100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th style="max-width: 20%">Seleccionar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td style="font-size:11px;">@item.marca</td>
+                                    <td style="font-size:11px;">@item.modelo</td>
+                                    <td style="font-size:11px;">
+                                        <input type="checkbox" id="CheckSelect" name="selectedVehicles" value="@item.matricula" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <center>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar</button>
+                </center>
+            </div>
+        </div>
+    </div>
+}

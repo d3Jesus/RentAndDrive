@@ -1,0 +1,188 @@
+﻿@model RentAndDrive.Models.Users.Mdl.VwUserData
+@{
+    ViewBag.Title = "Editar Funcionario";
+    List<SelectListItem> listaSexo = new List<SelectListItem>
+    {
+        new SelectListItem() { Text = "Masculino", Selected = Model.sexo.Equals("Masculino"), Value = "Masculino"},
+        new SelectListItem() { Text = "Feminino", Selected = Model.sexo.Equals("Feminino"), Value = "Feminino"}
+    };
+    List<SelectListItem> listaEstadoCivil = new List<SelectListItem>
+    {
+        new SelectListItem() { Text = "Solteiro(a)", Selected = Model.estadoCivil.Equals("Solteiro"), Value = "Solteiro"},
+        new SelectListItem() { Text = "Casado(a)", Selected = Model.estadoCivil.Equals("Casado"), Value = "Casado"},
+        new SelectListItem() { Text = "Divorciado(a)", Selected = Model.estadoCivil.Equals("Divorciado"), Value = "Divorciado"},
+        new SelectListItem() { Text = "Viúvo(a)", Selected = Model.estadoCivil.Equals("Viúvo"), Value = "Viúvo"}
+    };
+    List<SelectListItem> listaFuncao = new List<SelectListItem>
+    {
+        new SelectListItem() { Text = "Administrador", Selected = Model.funcao.Equals("Administrador"), Value = "Administrador"},
+        new SelectListItem() { Text = "Gestor", Selected = Model.funcao.Equals("Gestor"), Value = "Gestor"},
+        new SelectListItem() { Text = "Recepcionista", Selected = Model.funcao.Equals("Recepcionista"), Value = "Recepcionista"},
+        new SelectListItem() { Text = "Motorista", Selected = Model.funcao.Equals("Motorista"), Value = "Motorista"}
+    };
+    List<SelectListItem> listaTipoIdent = new List<SelectListItem>
+    {
+        new SelectListItem() { Text = "BI", Selected = Model.tipoDeIdentificacao.Equals("BI"), Value = "BI"},
+        new SelectListItem() { Text = "Passaporte", Selected = Model.tipoDeIdentificacao.Equals("Passaporte"), Value = "Passaporte"},
+        new SelectListItem() { Text = "DIRE", Selected = Model.tipoDeIdentificacao.Equals("DIRE"), Value = "DIRE"}
+    };
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Funcionarios")">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("EditarFuncionario", "Funcionarios", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Ocorreu um erro ao tentar editar o funcionário!. Corrija os erros e tente novamente")
+
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+            <!-- colors: "header-primary", "header-info", "header-success", "header-warning", "header-danger" -->
+            <div class="nav-tabs-navigation">
+                <div class="nav-tabs-wrapper">
+                    <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active text-primary" href="#personal" data-toggle="tab"><strong>Dados Pessoais</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="#address" data-toggle="tab"><strong>Endereço</strong></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="#bank" data-toggle="tab"><strong>Dados Banc&aacute;rios</strong></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="personal">
+                    @Html.HiddenFor(m => m.id)
+                    <div class="row">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-5">
+                            @Html.Label("Nome:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.nome, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.nome, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Sexo:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.sexo, new SelectList(listaSexo, "Value", "Text"), "Selecione o sexo", new
+                            {
+                                @class = "form-control",
+                                style = "font-size:12px"
+                            })
+                            @Html.ValidationMessageFor(m => m.sexo, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-4">
+                            @Html.Label("Estado Civil:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.estadoCivil, new SelectList(listaEstadoCivil, "Value", "Text"), "Selecione o estado civil", new
+                            {
+                                @class = "form-control",
+                                style = "font-size:12px"
+                            })
+                            @Html.ValidationMessageFor(m => m.estadoCivil, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Função:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.funcao, new SelectList(listaFuncao, "Value", "Text"), "Selecione a funcao", new
+                            {
+                                @class = "form-control",
+                                style = "font-size:12px"
+                            })
+                            @Html.ValidationMessageFor(m => m.funcao, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Tipo de Identificação:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.tipoDeIdentificacao, new SelectList(listaTipoIdent, "Value", "Text"), "Selecione o tipo de documento", new
+                            {
+                                @class = "form-control",
+                                style = "font-size:12px"
+                            })
+                            @Html.ValidationMessageFor(m => m.tipoDeIdentificacao, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Número de Identificação:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.numeroIdentificacao, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.numeroIdentificacao, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Número da Carta:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.numeroCarta, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.numeroCarta, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Código da Carta:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.codigoCarta, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.codigoCarta, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Valiade da Carta:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.validadeCarta, htmlAttributes: new { @class = "form-control", @type = "date" })
+                            @Html.ValidationMessageFor(m => m.validadeCarta, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Salário:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.salario, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.salario, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="address">
+                    @Html.HiddenFor(m => m.morada)
+                    <div class="row">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                            @Html.Label("Avenida:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.avenida, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                            @Html.ValidationMessageFor(m => m.avenida, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Rua:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.rua, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                            @Html.ValidationMessageFor(m => m.rua, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                            @Html.Label("Quarteirao:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.quarteirao, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.quarteirao, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="bank">
+                    @Html.HiddenFor(m => m.dadosBancarios)
+                    <div class="row">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                            @Html.Label("Banco:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.banco, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                            @Html.ValidationMessageFor(m => m.banco, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                            @Html.Label("Numero da Conta:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.numeroConta, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                            @Html.ValidationMessageFor(m => m.numeroConta, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                            @Html.Label("NIB:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.nib, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.nib, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                            @Html.Label("Titular:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.titular, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.titular, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+}

@@ -1,0 +1,201 @@
+﻿@model IEnumerable<RentAndDrive.Models.Alugueres.Mdl.VwAluguer>
+@{
+    ViewBag.Title = "Aluguer";
+    var sucesso = TempData["sucesso"] as string;
+    var falha = TempData["falha"] as string;
+}
+
+<style>
+    #dataTable tbody th, #dataTable tbody td {
+        padding: 10px 10px;
+    }
+</style>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $('#dataTable').DataTable({
+            paginate: true,
+            autoWidth: false,
+            select: true,
+            //Necessario desativar o scrollX e scrollY para acertar o header com o body.
+            //scrollResize: true,
+            //scrollY: 300
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Procurar ...",
+            }
+        });
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    });
+
+
+    // GET TYPE ID
+    var code = "";
+    function GetTableId() {
+        var table = $('#dataTable').DataTable();
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+
+        code = $.map(table.rows('.selected').data(), function (item) {
+            return item[0]
+        });
+        // This section show a message that code on the grid is null or empty
+        if (code == null || code == '') {
+            location.reload();
+        }
+        return code;
+    }
+
+    // PASS THE ID TO AJAX ACTION LINK
+    var row = "rowId";
+    function addParameter(e) {
+        var rowId = GetTableId();
+        e.href = e.href.replace(row, rowId);
+        row = rowId;
+    }
+
+    setTimeout(function () {
+        $('.alert').fadeOut('fast');
+    }, 2000);
+</script>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><a href="#">Aluguer</a></li>
+    </ol>
+</nav>
+
+@if (sucesso != null)
+{
+    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@sucesso</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (falha != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Aluguer
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="dataTable" style="width:100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="font-size:10px; font:bold; display: none;">
+                                @Html.DisplayName("Id")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Nome Cliente")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Viatura")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Motorista")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Data Aluguer")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Periodo")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Estado")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="font-size:12px; display: none;">
+                                    @Html.DisplayFor(modelItem => item.id)
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.nomeCliente)
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.viatura)
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.nomeMotorista)
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayName(item.dataAluguer.ToString("yyyy-MM-dd"))
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.periodo)
+                                </td>
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.estado)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <center>
+
+                @* CANCELAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "CancelarAluguer", routeValues: new { id = "rowId" })"
+                   style="float: right" title="Cancelar"
+                   class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
+                    Cancelar
+                </a>
+
+                @* ADICIONAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "Registar", controllerName: "Aluguer")"
+                   style="float: right" title="Registar Aluguer"
+                   class="btn btn-sm btn-outline-success">
+                    Adicionar
+                </a>
+            </center>
+        </div>
+    </div>
+</div>

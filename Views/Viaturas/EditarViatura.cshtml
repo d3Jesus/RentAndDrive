@@ -1,0 +1,113 @@
+﻿@using RentAndDrive.Models.Viaturas.Mdl
+@model RentAndDrive.Models.Viaturas.Mdl.Viatura
+@{
+    ViewBag.Title = "Editar Viatura";
+    List<ViaturaHelper> marcas = ViewData["Marcas"] as List<ViaturaHelper>;
+    List<ViaturaHelper> modelos = ViewData["Modelos"] as List<ViaturaHelper>;
+    
+    List<SelectListItem> listaEstado = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "Indisponível", Selected = Model.estado.ToUpper().Equals("Indisponivel"), Value = "Indisponivel"},
+        new SelectListItem() { Text = "Disponível", Selected = Model.estado.ToUpper().Equals("Disponivel"), Value = "Disponivel"},
+        new SelectListItem() { Text = "Ocupado", Selected = Model.estado.ToUpper().Equals("Ocupado"), Value = "Ocupado"}
+    };
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Viaturas")">Viaturas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("EditarViatura", "Viaturas", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Ocorreu um erro ao tentar registar o utilizador!. Corrija os erros e tente novamente")
+
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+            <h3 class="modal-title">Editar Viatura</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Matricula:", htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.matricula, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.matricula, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Cor:", htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.cor, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.cor, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Marca:", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(m => m.marca, new SelectList(marcas, "id", "descricao"), "Selecione a marca", new
+                    {
+                        @class = "form-control",
+                        style = "font-size:12px",
+                        @onchange = "pegarModelos(this.value)",
+                        @required = "required"
+                    })
+                    @Html.ValidationMessageFor(m => m.marca, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Modelo:", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(m => m.modelo, new SelectList(modelos, "id", "descricao"), "Selecione o modelo", new
+                    {
+                            @class = "form-control",
+                            @id = "idModelo",
+                            @name = "idModelo",
+                            @style = "font-size: 12px",
+                            @required = "required"
+                    })
+                    @Html.ValidationMessageFor(m => m.modelo, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Valor Aluguer:", htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.valorAluguer, htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.valorAluguer, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                    @Html.Label("Estado:", htmlAttributes: new { @class = "control-label" })
+                    @Html.DropDownListFor(m => m.estado, new SelectList(listaEstado, "Value", "Text"), new
+                    {
+                        @class = "form-control",
+                        style = "font-size:12px"
+                    })
+                    @Html.ValidationMessageFor(m => m.estado, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+}
+
+
+<script type="text/javascript">
+
+    function pegarModelos(_marca) {
+        $.ajax({
+            url: "/Viaturas/CarregarModelosPelaMarca/",
+            data: { mrc: _marca },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var subcat = $('#idModelo');
+                subcat.empty();
+                subcat.append($("<option value='0'> Selecione o modelo </option>"));
+                $.each(data, function (index, element) {
+                    subcat.append($("<option value='" + element.Value + "'>" + element.Text + "</option>"));
+                });
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+</script>

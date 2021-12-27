@@ -1,0 +1,188 @@
+﻿@using RentAndDrive.Models.Users.Mdl
+@model IEnumerable<VwUserRoles>
+@{
+    ViewBag.Title = "Gerir Aecssos";
+    string NavigationTitle = ViewData["NavigationTitle"] as string;
+    string userId = TempData["userId"] as string;
+    string id = TempData["Id"] as string;
+    string username = TempData["username"] as string;
+    TempData["username"] = username;
+
+    string sucesso = TempData["sucesso"] as string;
+    string falha = TempData["falha"] as string;
+
+    ICollection<VwRoleDescription> notuserRoles = ViewData["notuserRoles"] as ICollection<VwRoleDescription>;
+    ICollection<VwRoleDescription> userInRoles = ViewData["userInRoles"] as ICollection<VwRoleDescription>;
+}
+
+
+<style>
+    #userTable tbody th, #userTable tbody td {
+        padding: 10px 10px;
+    }
+</style>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $('#userTable').DataTable({
+            paginate: true,
+            autoWidth: false,
+            select: true,
+            //Necessario desativar o scrollX e scrollY para acertar o header com o body.
+            //scrollResize: true,
+            //scrollY: 300
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Procurar ...",
+            }
+        });
+
+        $('#userTable tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    });
+
+    function onCreate() {
+        $('#create').modal('show');
+    }
+    function onEdit() {
+        $('#edituser').modal('show');
+    }
+    function onDelete() {
+        $('#deleteuser').modal('show');
+    }
+
+
+    // GET TYPE ID
+    var code = "";
+    function GetTableId() {
+        var table = $('#userTable').DataTable();
+
+        $('#userTable tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+
+        code = $.map(table.rows('.selected').data(), function (item) {
+            return item[0]
+        });
+        // This section show a message that code on the grid is null or empty
+        if (code == null || code == '') {
+            alert('Selecione uma linha.');
+            location.reload();
+        }
+        return code;
+    }
+
+    // PASS THE ID TO AJAX ACTION LINK
+    var row = "rowId";
+    function addParameter(e) {
+        var rowId = GetTableId();
+        e.href = e.href.replace(row, rowId);
+        row = rowId;
+    }
+
+    setTimeout(function () {
+        $('.alert').fadeOut('fast');
+    }, 2000);
+</script>
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Users")">Usu&aacute;rios</a></li>
+        <li class="breadcrumb-item active"><a href="#">Gerir Acessos</a></li>
+    </ol>
+</nav>
+
+@if (sucesso != null)
+{
+    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@sucesso</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (falha != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+
+
+<div class="card mb-4">
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Lista de Acessos do Utilizador - @username
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="userTable" style="width:100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Acessos")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td style="font-size:12px;">
+                                    @Html.DisplayFor(modelItem => item.roleName)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <center>
+                @* REMOVER ACESSOS *@
+                <a href="@Url.Action("RemoverAcessos", "Users", routeValues: new { id = id })"
+                   id="password" title="password" class="btn btn-outline-secondary btn-sm"
+                   style="float: right" >
+                    <span class="fa fa-edit"></span> Remover Acesso
+                </a>
+                @* ADICIONAR ACESSOS *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action("AtribuirAcessos", "Users", routeValues: new { id = id })"
+                   id="manage" title="manage" class="btn btn-outline-primary btn-sm"
+                   style="float: right">
+                    <span class="fa fa-lock"></span> Atribuir Acesso
+                </a>
+            </center>
+        </div>
+    </div>
+</div>
+

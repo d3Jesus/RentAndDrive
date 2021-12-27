@@ -1,0 +1,39 @@
+﻿@model RentAndDrive.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Editar Credenciais";
+    var id = TempData["PessoaId"] as string;
+    TempData["PessoaId"] = id;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Editar Acesso</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Ocorreu um erro ao tentar registar o utilizador!. Corrija os erros e tente novamente")
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+
+        </div>
+        <div class="card-body">
+            @Html.HiddenFor(m => m.tempEmail)
+            @Html.HiddenFor(m => m.userId)
+            <div class="row">
+                <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                    @Html.Label("Email:", htmlAttributes: new { @class = "control-label" })
+                    @Html.TextBoxFor(m => m.Email, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-light">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-success">Salvar</button>
+        </div>
+    </div>
+}

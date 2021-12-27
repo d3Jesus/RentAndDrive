@@ -1,0 +1,231 @@
+﻿@model IEnumerable<RentAndDrive.Models.Viaturas.Mdl.VwViatura>
+@{
+    ViewBag.Title = "Viaturas";
+    var sucesso = TempData["sucesso"] as string;
+    var falha = TempData["falha"] as string;
+}
+
+
+<style>
+    #dataTable tbody th, #dataTable tbody td, #dataTable tbody tr {
+        padding: 10px 10px;
+    }
+</style>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var table = $('#dataTable').DataTable({
+            paginate: true,
+            autoWidth: false,
+            select: true,
+            //Necessario desativar o scrollX e scrollY para acertar o header com o body.
+            //scrollResize: true,
+            //scrollY: 300
+            "pagingType": "full_numbers",
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            responsive: true,
+            language: {
+                search: "_INPUT_",
+                searchPlaceholder: "Procurar ...",
+            }
+        });
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+            }
+            else {
+                table.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+            }
+        });
+    });
+
+
+    function onDelete() {
+        $("#delete").modal();
+    }
+
+
+    // GET TYPE ID
+    var code = "";
+    function GetTableId() {
+        var table = $('#dataTable').DataTable();
+
+        $('#dataTable tbody').on('click', 'tr', function () {
+            $(this).toggleClass('selected');
+        });
+
+        code = $.map(table.rows('.selected').data(), function (item) {
+            return item[0]
+        });
+        // This section show a message that code on the grid is null or empty
+        if (code == null || code == '') {
+            location.reload();
+        }
+        return code;
+    }
+
+    // PASS THE ID TO AJAX ACTION LINK
+    var row = "rowId";
+    function addParameter(e) {
+        var rowId = GetTableId();
+        e.href = e.href.replace(row, rowId);
+        row = rowId;
+    }
+
+    setTimeout(function () {
+        $('.alert').fadeOut('fast');
+    }, 2000);
+</script>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active"><a href="#">Funcion&aacute;rios</a></li>
+    </ol>
+</nav>
+
+@if (sucesso != null)
+{
+    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@sucesso</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (falha != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Lista de Viaturas
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered" id="dataTable" style="width:100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Matricula")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Cor")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Marca")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Modelo")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Valor Aluguer")
+                            </th>
+                            <th style="font-size:10px; font:bold">
+                                @Html.DisplayName("Estado")
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+
+                            <td style="font-size:12px;">
+                                @Html.DisplayFor(modelItem => item.matricula)
+                            </td>
+                            <td style="font-size:12px;">
+                                @Html.DisplayFor(modelItem => item.cor)
+                            </td>
+                            <td style="font-size:12px;">
+                                @Html.DisplayFor(modelItem => item.marca)
+                            </td>
+                            <td style="font-size:12px;">
+                                @Html.DisplayFor(modelItem => item.modelo)
+                            </td>
+                            <td style="font-size:12px;">
+                                @Html.DisplayFor(modelItem => item.valorAluguer)
+                            </td>
+                            @{
+                                if (item.estado.ToUpper().Equals("DISPONIVEL"))
+                                {
+                                    <td style="font-size:12px; color: #00ad5f">
+                                        @Html.DisplayName(item.estado)
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="font-size:12px; color: #fa4251">
+                                        @Html.DisplayName(item.estado)
+                                    </td>
+                                }
+                            }
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <center>
+
+                @* DISPONIBILIZAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "DisponibilizarViatura", routeValues: new { matricula = "rowId" })"
+                   style="float: right" title="Apagar"
+                   class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
+                    Disponibilizar
+                </a>
+
+                @* APAGAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "EliminarViatura", routeValues: new { matricula = "rowId" })"
+                   style="float: right" title="Apagar"
+                   class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
+                    Apagar
+                </a>
+
+                @* EDITAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "EditarViatura", routeValues: new { matricula = "rowId" })"
+                   style="float: right" title="Editar"
+                   class="btn btn-sm btn-outline-info" onclick="addParameter(this)">
+                    Editar
+                </a>
+
+                @* ADICIONAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "RegistarViatura", controllerName: "Viaturas")"
+                   style="float: right" title="Editar Cliente"
+                   class="btn btn-sm btn-outline-success">
+                    Adicionar
+                </a>
+            </center>
+        </div>
+    </div>
+</div>
+
+
+<div id="openmodal"></div>

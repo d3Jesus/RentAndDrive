@@ -1,0 +1,132 @@
+﻿@model RentAndDrive.Models.Pessoas.Mdl.Funcionario.VwFuncionarioResumo
+@{
+    ViewBag.Title = "Credenciais";
+    var sucesso = TempData["sucesso"] as string;
+    var falha = TempData["falha"] as string;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Funcionarios")">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item active"><a href="#">Credenciais</a></li>
+    </ol>
+</nav>
+
+
+@if (sucesso != null)
+{
+    <div class="sufee-alert alert with-close alert-success alert-dismissible fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@sucesso</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (falha != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+
+<div class="card mb-4">
+    <div class="card mb-2">
+        <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+            Credenciais
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table>
+                    <tbody>
+                        <tr class="border_bottom">
+                            <td style="width:50%"><b>Nome do Funcion&aacute;rio</b>:</td>
+                            <td>@Html.Label(Model.nome, htmlAttributes: new { @class = "control-label" })</td>
+                        </tr>
+                        <tr class="border_bottom">
+                            <td><b>Endere&ccedil;o</b>:</td>
+                            <td>@Html.Label(Model.endereco, htmlAttributes: new { @class = "control-label" })</td>
+                        </tr>
+                        <tr class="border_bottom">
+                            <td><b>Fun&ccedil;&atilde;o</b>:</td>
+                            <td>@Html.Label(Model.funcao, htmlAttributes: new { @class = "control-label" })</td>
+                        </tr>
+                        <tr class="border_bottom">
+                            <td><b>Estado</b>:</td>
+                            @{
+                                if (Model.estado.ToUpper().Equals("ACTIVO"))
+                                {
+                                    <td><span class="status--process">@Html.Label(Model.estado, htmlAttributes: new { @class = "control-label" })</span></td>
+                                }
+                                else
+                                {
+                                    <td><span class="status--denied">@Html.Label(Model.estado, htmlAttributes: new { @class = "control-label" })</span></td>
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <center>
+
+                @if (Model.estado.ToUpper().Equals("INACTIVO"))
+                {
+                    @* ACTIVAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "ActivarFuncionario", routeValues: new { id = Model.id })"
+                       style="float: right" title="Activar Acesso"
+                       class="btn btn-sm btn-outline-primary">
+                        Activar
+                    </a>
+                }
+
+                @if (Model.estado.ToUpper().Equals("ACTIVO"))
+                {
+                    @* DESACTIVAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "DesactivarFuncionario", routeValues: new { id = Model.id })"
+                       style="float: right" title="Desactivar Acesso"
+                       class="btn btn-sm btn-outline-secondary">
+                        Desactivar
+                    </a>
+                }
+
+
+                @if (Model.estado.ToUpper().Equals("ACTIVO") && (Model.estado.ToUpper().Equals("INACTIVO")))
+                {
+                    @* EDITAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "Edit", controllerName: "Account", routeValues: new { id = Model.id })"
+                       style="float: right" title="Editar"
+                       class="btn btn-sm btn-outline-info">
+                        Editar
+                    </a>
+                }
+
+                @if (!Model.estado.ToUpper().Equals("ACTIVO") && !(Model.estado.ToUpper().Equals("INACTIVO")))
+                {
+                    @* CRIAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "Register", controllerName: "Account", routeValues: new { id = Model.id })"
+                       style="float: right" title="Editar Cliente"
+                       class="btn btn-sm btn-outline-success">
+                        Adicionar
+                    </a>
+                }
+            </center>
+        </div>
+    </div>
+</div>
