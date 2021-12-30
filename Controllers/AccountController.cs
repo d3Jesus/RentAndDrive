@@ -80,7 +80,14 @@ namespace RentAndDrive.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    Models.Users.Mdl.VwUsers users = Models.Users.DAL.UsersDal.GetUserByEmail(model.Email);
+                    var user = await UserManager.FindByNameAsync(model.Email);
+
+                    if (!UsersDal.IsActive(user.Id))
+                    {
+                        ModelState.AddModelError("", "Estas credenciais foram desactivadas. Contacte o administrador do sistema para as activar!");
+                        return View(model);
+                    }
+                    Models.Users.Mdl.VwUsers users = UsersDal.GetUserByEmail(model.Email);
                     Session.Add("idFuncionario", users.id);
                     Session.Add("nomeFuncionario", users.nome);
                     Session.Add("emailFuncionario", users.email);
@@ -91,7 +98,7 @@ namespace RentAndDrive.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    ModelState.AddModelError("", "Tentativa de login inválida.");
                     return View(model);
             }
         }

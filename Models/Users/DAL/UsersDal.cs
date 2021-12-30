@@ -7,6 +7,15 @@ namespace RentAndDrive.Models.Users.DAL
 {
     public class UsersDal
     {
+        public static bool IsActive(string id)
+        {
+            using (var ctx = new DataDbContext())
+            {
+                var status = ctx.pessoaUsuarios.Where(u => u.idUsuario == id).FirstOrDefault().estado;
+                return status == "Activo";
+            }
+        }
+
         public static List<VwUsers> GetAllUsers()
         {
             using (DataDbContext ctx = new DataDbContext())
