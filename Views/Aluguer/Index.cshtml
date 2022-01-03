@@ -180,21 +180,29 @@
         <div class="card-footer">
             <center>
 
-                @* CANCELAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "CancelarAluguer", routeValues: new { al = "rowId" })"
-                   style="float: right" title="Cancelar"
-                   class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
-                    Cancelar
-                </a>
+                @{
+                    if (User.IsInRole("CANCELAR_ALUGUER"))
+                    {
+                        @* CANCELAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "CancelarAluguer", routeValues: new { al = "rowId" })"
+                           style="float: right" title="Cancelar"
+                           class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
+                            Cancelar
+                        </a>
+                    }
 
-                @* ADICIONAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "Registar", controllerName: "Aluguer")"
-                   style="float: right" title="Registar Aluguer"
-                   class="btn btn-sm btn-outline-success">
-                    Adicionar
-                </a>
+                    if (User.IsInRole("REGISTAR_ALUGUER"))
+                    {
+                        @* ADICIONAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "Registar", controllerName: "Aluguer")"
+                           style="float: right" title="Registar Aluguer"
+                           class="btn btn-sm btn-outline-success">
+                            Adicionar
+                        </a>
+                    }
+                }
             </center>
         </div>
     </div>

@@ -15,12 +15,14 @@ namespace RentAndDrive.Controllers
     {
         #region CRUD
         // GET: Aluguer
+        [Authorize(Roles = "CONSULTAR_ALUGUERES")]
         public ActionResult Index()
         {
             return View(DalAluguer.CarregarAluguers());
         }
 
         [HttpGet]
+        [Authorize(Roles = "REGISTAR_ALUGUER")]
         public ActionResult Registar()
         {
             // Marcas das viaturas
@@ -44,12 +46,14 @@ namespace RentAndDrive.Controllers
         }
         
         [HttpGet]
+        [Authorize(Roles = "CONSULTAR_ALUGUER_ACTIVO")]
         public ActionResult AlguerActivo()
         {
             return View(DalAluguer.CarregarAluguers().Where(a => a.estado == "Activo").ToList());
         }
 
         //[HttpPost]
+        [Authorize(Roles = "CANCELAR_ALUGUER")]
         public ActionResult CancelarAluguer(string al)
         {
             if(al == null || al == "" || al == "rowId")
@@ -69,6 +73,7 @@ namespace RentAndDrive.Controllers
         }
         
         [HttpGet]
+        [Authorize(Roles = "TERMINAR_O_SERVICO_DE_ALUGUER")]
         public ActionResult Terminar(string al)
         {
             if(al == null || al == "" || al == "rowId")

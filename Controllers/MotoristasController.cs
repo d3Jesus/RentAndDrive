@@ -11,11 +11,13 @@ namespace RentAndDrive.Controllers
     public class MotoristasController : Controller
     {
         // GET: Motoristas
+        [Authorize(Roles = "CONSULTAR_MOTORISTAS")]
         public ActionResult Index()
         {
             return View(DalFuncionarios.CarregarFuncionariosPelaFuncao("Motorista"));
         }
 
+        [Authorize(Roles = "CONSULTAR_VIATURAS_ATRIBUIDAS_AOS_MOTORISTAS")]
         public ActionResult ViaturasAtribuidas(string id)
         {
             if (id == null || id == "rowId")
@@ -30,6 +32,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ATRIBUIR_VIATURAS_AOS_MOTORISTAS")]
         public ActionResult AtribuirViaturas(string id)
         {
             string nome = TempData["Motorista"] as string;
@@ -55,6 +58,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "REMOVER_VIATURAS_ATRIBUIDAS_AOS_MOTORISTAS")]
         public ActionResult RemoverViaturas(string id)
         {
             string nome = TempData["Motorista"] as string;

@@ -168,37 +168,51 @@
         <div class="card-footer">
             <center>
 
-                @* CREDENCIAIS *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "Credenciais", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Credenciais do Funcionário"
-                   class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
-                    Credenciais
-                </a>
+                @{
+                    if (User.IsInRole("GESTAO_DE_CREDENCIAIS_DOS_FUNCIONARIOS"))
+                    {
+                        @* CREDENCIAIS *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "Credenciais", routeValues: new { id = "rowId" })"
+                           style="float: right" title="Credenciais do Funcionário"
+                           class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
+                            Credenciais
+                        </a>
+                    }
 
-                @* APAGAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "EliminarFuncionario", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Apagar"
-                   class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
-                    Eliminar
-                </a>
+                    if (User.IsInRole("ELIMINAR_FUNCIONARIOS"))
+                    {
+                        @* APAGAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "EliminarFuncionario", routeValues: new { id = "rowId" })"
+                           style="float: right" title="Apagar"
+                           class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
+                            Eliminar
+                        </a>
+                    }
 
-                @* EDITAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "EditarFuncionario", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Editar"
-                   class="btn btn-sm btn-outline-info" onclick="addParameter(this)">
-                    Editar
-                </a>
+                    if (User.IsInRole("EDITAR_FUNCIONARIOS"))
+                    {
+                        @* EDITAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "EditarFuncionario", routeValues: new { id = "rowId" })"
+                           style="float: right" title="Editar"
+                           class="btn btn-sm btn-outline-info" onclick="addParameter(this)">
+                            Editar
+                        </a>
+                    }
 
-                @* ADICIONAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "RegistarFuncionario", controllerName: "Funcionarios")"
-                   style="float: right" title="Editar Cliente"
-                   class="btn btn-sm btn-outline-success">
-                    Adicionar
-                </a>
+                    if (User.IsInRole("REGISTAR_FUNCIONARIOS"))
+                    {
+                        @* ADICIONAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "RegistarFuncionario", controllerName: "Funcionarios")"
+                           style="float: right" title="Editar Cliente"
+                           class="btn btn-sm btn-outline-success">
+                            Adicionar
+                        </a>
+                    }
+                }
             </center>
         </div>
     </div>

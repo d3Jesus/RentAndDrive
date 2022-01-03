@@ -16,6 +16,7 @@ namespace RentAndDrive.Controllers
 
         #region CRUD
         // GET: Funcionarios
+        [Authorize(Roles= "CONSULTAR_FUNCIONARIOS")]
         public ActionResult Index()
         {
             var data = DalFuncionarios.CarregarFuncionarios();
@@ -23,6 +24,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "REGISTAR_FUNCIONARIOS")]
         public ActionResult RegistarFuncionario()
         {
             return View(new VwUserData());
@@ -39,6 +41,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "EDITAR_FUNCIONARIOS")]
         public ActionResult EditarFuncionario(string id)
         {
             if (id == null || id == "rowId")
@@ -87,6 +90,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ELIMINAR_FUNCIONARIOS")]
         public ActionResult EliminarFuncionario(string id)
         {
             if (id == null || id == "rowId")
@@ -110,6 +114,7 @@ namespace RentAndDrive.Controllers
         #endregion
 
         #region Credendiais
+        [Authorize(Roles = "GESTAO_DE_CREDENCIAIS_DOS_FUNCIONARIOS")]
         public ActionResult Credenciais(string id)
         {
             if (id == null || id == "rowId")
@@ -126,6 +131,7 @@ namespace RentAndDrive.Controllers
             return View(data);
         }
         [HttpGet]
+        [Authorize(Roles = "ACTIVAR_CREDENCIAIS")]
         public ActionResult ActivarFuncionario(string id)
         {
             if (DalFuncionarios.ActivarDesactivarCredenciais(id, "Activo"))
@@ -135,6 +141,7 @@ namespace RentAndDrive.Controllers
             return RedirectToAction(nameof(Credenciais), routeValues: new { id = id });
         }
         [HttpGet]
+        [Authorize(Roles = "DESACTIVAR_CREDENCIAIS")]
         public ActionResult DesactivarFuncionario(string id)
         {
             if (DalFuncionarios.ActivarDesactivarCredenciais(id, "Inactivo"))

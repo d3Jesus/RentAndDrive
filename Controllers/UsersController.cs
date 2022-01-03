@@ -13,6 +13,7 @@ namespace RentAndDrive.Controllers
     public class UsersController : Controller
     {
         // GET: Users
+        [Authorize(Roles = "CONSULTAR_USUARIOS")]
         public ActionResult Index()
         {
             var data = UsersDal.GetAllUsers();
@@ -20,7 +21,7 @@ namespace RentAndDrive.Controllers
         }
 
         #region User Roles
-        //[Authorize(Roles = "ALLOW_USER_MANAGER, ALLOW_USER_MANAGE_ACCESS")]
+        [Authorize(Roles = "GERIR_ACESSOS")]
         public ActionResult GerirAcessos(string id)
         {
             if (id == null || id == "")
@@ -48,6 +49,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ATRIBUIR_ACESSOS_AOS_UTILIZADORES")]
         public ActionResult AtribuirAcessos(string id)
         {
             TempData["Id"] = id;
@@ -83,6 +85,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "REMOVER_ACESSOS_AOS_UTILIZADORES")]
         public ActionResult RemoverAcessos(string id)
         {
             TempData["Id"] = id;

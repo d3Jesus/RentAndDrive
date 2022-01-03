@@ -161,14 +161,16 @@
 
         <div class="card-footer">
             <center>
+                @if (User.IsInRole("CONSULTAR_VIATURAS_ATRIBUIDAS_AOS_MOTORISTAS"))
+                {
 
-                @* ADICIONAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "ViaturasAtribuidas", controllerName: "Motoristas", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Consultar Viaturas Atribuídas"
-                   class="btn btn-sm btn-outline-success" onclick="addParameter(this)">
-                    Consultar Viaturas Atribuídas
-                </a>
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "ViaturasAtribuidas", controllerName: "Motoristas", routeValues: new { id = "rowId" })"
+                       style="float: right" title="Consultar Viaturas Atribuídas"
+                       class="btn btn-sm btn-outline-success" onclick="addParameter(this)">
+                        Consultar Viaturas Atribuídas
+                    </a>
+                }
             </center>
         </div>
     </div>

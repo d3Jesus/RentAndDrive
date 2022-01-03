@@ -13,12 +13,14 @@ namespace RentAndDrive.Controllers
     {
         #region CRUD
         // GET: Cliente
+        [Authorize(Roles = "CONSULTAR_CLIENTES")]
         public ActionResult Index()
         {
             return View(DalCliente.CarregarListaDeClientes());
         }
 
         [HttpGet]
+        [Authorize(Roles = "REGISTAR_CLIENTES")]
         public ActionResult RegistarCliente()
         {
             return View(new VwCliente());
@@ -35,6 +37,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "EDITAR_CLIENTES")]
         public ActionResult EditarCliente(string id)
         {
             if (id == null || id == "rowId")
@@ -76,6 +79,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ELIMINAR_CLIENTES")]
         public ActionResult EliminarCliente(string id)
         {
             if (id == null || id == "rowId")

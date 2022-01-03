@@ -179,29 +179,40 @@
         <div class="card-footer">
             <center>
 
-                @* APAGAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "EliminarCliente", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Apagar Cliente"
-                   class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
-                    Eliminar
-                </a>
+                @{
+                    if (User.IsInRole("ELIMINAR_CLIENTES"))
+                    {
+                        @* APAGAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "EliminarCliente", routeValues: new { id = "rowId" })"
+                           style="float: right" title="Apagar Cliente"
+                           class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
+                            Eliminar
+                        </a>
+                    }
 
-                @* EDITAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "EditarCliente", routeValues: new { id = "rowId" })"
-                   style="float: right" title="Editar Cliente"
-                   class="btn btn-sm btn-outline-info" onclick="addParameter(this)">
-                    Editar
-                </a>
+                    if (User.IsInRole("EDITAR_CLIENTES"))
+                    {
+                        @* EDITAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "EditarCliente", routeValues: new { id = "rowId" })"
+                           style="float: right" title="Editar Cliente"
+                           class="btn btn-sm btn-outline-info" onclick="addParameter(this)">
+                            Editar
+                        </a>
+                    }
 
-                @* ADICIONAR *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "RegistarCliente", controllerName: "Clientes")"
-                   style="float: right" title="Adicionar Cliente"
-                   class="btn btn-sm btn-outline-success">
-                    Adicionar
-                </a>
+                    if (User.IsInRole("REGISTAR_CLIENTES"))
+                    {
+                        @* ADICIONAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "RegistarCliente", controllerName: "Clientes")"
+                           style="float: right" title="Adicionar Cliente"
+                           class="btn btn-sm btn-outline-success">
+                            Adicionar
+                        </a>
+                    }
+                }
             </center>
         </div>
     </div>

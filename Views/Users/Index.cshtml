@@ -190,19 +190,25 @@
 
         <div class="card-footer">
             <center>
-                @* RESETAR SENHA *@
-                <a href="@Url.Action("ResetPassword", "Account", routeValues: new { code = "rowId" })"
-                   id="password" title="password" class="btn btn-outline-secondary btn-sm"
-                   style="float: right" onclick="addParameter(this)">
-                    <span class="fa fa-edit"></span> Resetar Senha
-                </a>
-                @* GERIR ACESSOS *@
-                <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action("GerirAcessos", "Users", routeValues: new { id = "rowId" })"
-                   id="manage" title="manage" class="btn btn-outline-primary btn-sm"
-                   style="float: right" onclick="addParameter(this)">
-                    <span class="fa fa-lock"></span> Gerir Acessos
-                </a>
+                @if (User.IsInRole("RESETAR_SENHA_DOS_UTILIZADORES"))
+                {
+                    @* RESETAR SENHA *@
+                    <a href="@Url.Action("ResetPassword", "Account", routeValues: new { code = "rowId" })"
+                       id="password" title="password" class="btn btn-outline-secondary btn-sm"
+                       style="float: right" onclick="addParameter(this)">
+                        <span class="fa fa-edit"></span> Resetar Senha
+                    </a>
+                }
+                @if (User.IsInRole("GERIR_ACESSOS"))
+                {
+                    @* GERIR ACESSOS *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action("GerirAcessos", "Users", routeValues: new { id = "rowId" })"
+                       id="manage" title="manage" class="btn btn-outline-primary btn-sm"
+                       style="float: right" onclick="addParameter(this)">
+                        <span class="fa fa-lock"></span> Gerir Acessos
+                    </a>
+                }
             </center>
         </div>
     </div>

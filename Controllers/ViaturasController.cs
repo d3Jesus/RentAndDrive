@@ -13,12 +13,15 @@ namespace RentAndDrive.Controllers
     {
         #region CRUD
         // GET: Veiculos
+        [Authorize(Roles = "CONSULTAR_VIATURAS")]
         public ActionResult Index()
         {
             var data = DalViaturas.GetViaturas();
             return View(data);
         }
+       
         [HttpGet]
+        [Authorize(Roles = "REGISTAR_VIATURAS")]
         public ActionResult RegistarViatura()
         {
             ViewData["Marcas"] = DalViaturas.GetViaturaHelpersPeloTipo("Marca");
@@ -36,6 +39,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "EDITAR_VIATURAS")]
         public ActionResult EditarViatura(string matricula)
         {
             if (matricula == null || matricula == "rowId")
@@ -60,6 +64,7 @@ namespace RentAndDrive.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "ELIMINAR_VIATURAS")]
         public ActionResult EliminarViatura(string matricula)
         {
             if (matricula == null || matricula == "rowId")
@@ -81,7 +86,7 @@ namespace RentAndDrive.Controllers
             return RedirectToAction(nameof(Index));
         }
         #endregion
-
+        [Authorize(Roles = "DISPONIBILIZAR_VIATURAS")]
         public ActionResult DisponibilizarViatura(string m)
         {
             if (m == null || m == "" || m == "rowId")
@@ -94,7 +99,25 @@ namespace RentAndDrive.Controllers
                 TempData["falha"] = "A viatura já se encontra disponível para uso.";
             else
                 if (DalViaturas.AlterarEstado(m, "Disponivel"))
-                    TempData["sucesso"] = "Viatura disponibilizada para uso!";
+                    TempData["sucesso"] = "Viatura " + m + " disponível para uso!";
+
+            return RedirectToAction(nameof(Index));
+        }
+        
+        [Authorize(Roles = "INDISPONIBILIZAR_VIATURAS")]
+        public ActionResult IndisponibilizarViatura(string m)
+        {
+            if (m == null || m == "" || m == "rowId")
+            {
+                TempData["falha"] = "Selecione a viatura que deseja indisponibilizar!";
+                return RedirectToAction(nameof(Index));
+            }
+            string estado = DalViaturas.Estado(m);
+            if (estado.ToUpper().Equals("INDISPONIVEL"))
+                TempData["falha"] = "A viatura já se encontra indisponível para uso.";
+            else
+                if (DalViaturas.AlterarEstado(m, "Indisponivel"))
+                    TempData["sucesso"] = "Viatura " + m + " indisponível para uso!";
 
             return RedirectToAction(nameof(Index));
         }

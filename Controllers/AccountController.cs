@@ -148,7 +148,8 @@ namespace RentAndDrive.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Roles = "REGISTAR_CREDENCIAIS")]
         public ActionResult Register(string id)
         {
             TempData["PessoaId"] = id;
@@ -293,7 +294,8 @@ namespace RentAndDrive.Controllers
 
         //
         // GET: /Account/ResetPassword
-        [AllowAnonymous]
+        //[AllowAnonymous]
+        [Authorize(Roles = "RESETAR_SENHA_DOS_UTILIZADORES")]
         public ActionResult ResetPassword(string code)
         {
             ResetPasswordViewModel m = new ResetPasswordViewModel();

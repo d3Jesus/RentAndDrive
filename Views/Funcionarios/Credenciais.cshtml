@@ -84,24 +84,30 @@
 
                 @if (Model.estado.ToUpper().Equals("INACTIVO"))
                 {
-                    @* ACTIVAR *@
-                    <span class="text-light" style="float: right">  | </span>
-                    <a href="@Url.Action(actionName: "ActivarFuncionario", routeValues: new { id = Model.id })"
-                       style="float: right" title="Activar Acesso"
-                       class="btn btn-sm btn-outline-primary">
-                        Activar
-                    </a>
+                    if (User.IsInRole("ACTIVAR_CREDENCIAIS"))
+                    {
+                        @* ACTIVAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "ActivarFuncionario", routeValues: new { id = Model.id })"
+                           style="float: right" title="Activar Acesso"
+                           class="btn btn-sm btn-outline-primary">
+                            Activar
+                        </a>
+                    }
                 }
 
                 @if (Model.estado.ToUpper().Equals("ACTIVO"))
                 {
-                    @* DESACTIVAR *@
-                    <span class="text-light" style="float: right">  | </span>
-                    <a href="@Url.Action(actionName: "DesactivarFuncionario", routeValues: new { id = Model.id })"
-                       style="float: right" title="Desactivar Acesso"
-                       class="btn btn-sm btn-outline-secondary">
-                        Desactivar
-                    </a>
+                    if (User.IsInRole("DESACTIVAR_CREDENCIAIS"))
+                    {
+                        @* DESACTIVAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "DesactivarFuncionario", routeValues: new { id = Model.id })"
+                           style="float: right" title="Desactivar Acesso"
+                           class="btn btn-sm btn-outline-secondary">
+                            Desactivar
+                        </a>
+                    }
                 }
 
 
@@ -118,13 +124,16 @@
 
                 @if (!Model.estado.ToUpper().Equals("ACTIVO") && !(Model.estado.ToUpper().Equals("INACTIVO")))
                 {
-                    @* CRIAR *@
-                    <span class="text-light" style="float: right">  | </span>
-                    <a href="@Url.Action(actionName: "Register", controllerName: "Account", routeValues: new { id = Model.id })"
-                       style="float: right" title="Editar Cliente"
-                       class="btn btn-sm btn-outline-success">
-                        Adicionar
-                    </a>
+                    if (User.IsInRole("REGISTAR_CREDENCIAIS"))
+                    {
+                        @* CRIAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "Register", controllerName: "Account", routeValues: new { id = Model.id })"
+                           style="float: right" title="Editar Cliente"
+                           class="btn btn-sm btn-outline-success">
+                            Adicionar
+                        </a>
+                    }
                 }
             </center>
         </div>
