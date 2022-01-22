@@ -30,5 +30,7 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public string estado { get; set; }
         [Column("DataDevolucao")]
         public DateTime dataDevolucao { get; set; }
+        [Column("ValorPago")]
+        public decimal valorPago { get; set; }
     }
 }

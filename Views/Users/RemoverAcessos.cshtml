@@ -7,6 +7,15 @@
 
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
+        <li class="breadcrumb-item">Usu&aacute;rios</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("GerirAcessos", "Users", new { id })">Gerir Acessos</a></li>
+        <li class="breadcrumb-item active">Remover Acessos</li>
+    </ol>
+</nav>
+
 <script type="text/javascript">
     $(document).ready(function () {
         var table = $('#dataTable').DataTable({
@@ -40,8 +49,6 @@
         });
     });
 </script>
-
-
 
 @using (Html.BeginForm("RemoverAcessos", "Users", new { userId }, FormMethod.Post, new { id = "formSaveRoles" }))
 {
@@ -79,7 +86,7 @@
 
             <div class="card-footer">
                 <center>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <a href="@Url.Action("Index", "Users")" class="btn btn-danger">Cancelar</a>
                     <button type="submit" class="btn btn-success">Salvar</button>
                 </center>
             </div>

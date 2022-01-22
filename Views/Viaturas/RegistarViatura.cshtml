@@ -14,8 +14,9 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Viaturas")">Viaturas</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Registar</li>
+        <li class="breadcrumb-item">Parametriza&ccedil;&atilde;o</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Viaturas")">Viaturas</a></li>
+        <li class="breadcrumb-item active">Adicionar</li>
     </ol>
 </nav>
 
@@ -80,7 +81,7 @@
             </div>
         </div>
         <div class="card-footer bg-light">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <a href="@Url.Action("Index","Viaturas")" class="btn btn-danger" >Cancelar</a>
             <button type="submit" class="btn btn-success">Salvar</button>
         </div>
     </div>

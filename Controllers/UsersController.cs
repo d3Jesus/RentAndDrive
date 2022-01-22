@@ -56,6 +56,11 @@ namespace RentAndDrive.Controllers
             string userId = DalPessoa.CarregaIdUsuarioPeloIdDaEntidade(id).idUsuario;
             TempData["UserId"] = userId;
             var data = UsersDal.CarregarTodasAcessosQueOUsuarioNaoTem(userId);
+            if (data.Count == 0)
+            {
+                TempData["informacao"] = "O usuário selecionado possui todos acessos.";
+                return RedirectToAction(nameof(GerirAcessos), new { id });
+            }
             return View(data);
         }
 
@@ -92,6 +97,11 @@ namespace RentAndDrive.Controllers
             string userId = DalPessoa.CarregaIdUsuarioPeloIdDaEntidade(id).idUsuario;
             TempData["UserId"] = userId;
             var data = UsersDal.CarregarTodasAcessosQueOUsuarioTem(userId);
+            if(data.Count == 0)
+            {
+                TempData["informacao"] = "O usuário selecionado não possui nenhum acesso.";
+                return RedirectToAction(nameof(GerirAcessos),new { id });
+            }
             return View(data);
         }
 

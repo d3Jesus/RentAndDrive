@@ -48,10 +48,7 @@
                 <div class="login-wrap">
                     <div class="login-content">
                         <div class="login-logo">
-                            <a href="#">
-                                @*<img src="images/icon/logo.png" alt="Rent&Drive">*@
-                                Rent &amp; Drive
-                            </a>
+                            <h3>Rent &amp; Drive</h3>
                         </div>
                         <div class="login-form">
                             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -75,9 +72,9 @@
                                     </div>
                                 </div>
                                 <div class="login-checkbox">
-                                    <label>
+                                    @*<label>
                                         <input type="checkbox" name="remember">Remember Me
-                                    </label>
+                                    </label>*@
                                     @*<label>
                                         <a href="#">Forgotten Password?</a>
                                     </label>*@

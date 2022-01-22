@@ -325,7 +325,8 @@ namespace RentAndDrive.Controllers
             var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Users");
+                TempData["sucesso"] = "Senha resetada com sucesso";
+                return View(UsersDal.GetAllUsers());
             }
             AddErrors(result);
             return View();

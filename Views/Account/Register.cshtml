@@ -7,7 +7,9 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Funcionarios")">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Credenciais","Funcionarios", new { id })">Credenciais</a></li>
         <li class="breadcrumb-item active" aria-current="page">Criar Acesso</li>
     </ol>
 </nav>
@@ -18,7 +20,7 @@
     @Html.ValidationSummary(true, "Ocorreu um erro ao tentar registar o utilizador!. Corrija os erros e tente novamente")
     <div class="card card-nav-tabs card-plain">
         <div class="card-header card-header-danger">
-
+            Criar Credencial
         </div>
         <div class="card-body">
             <p>

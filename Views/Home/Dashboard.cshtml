@@ -51,8 +51,8 @@
                             <i class="zmdi zmdi-account-o"></i>
                         </div>
                         <div class="text">
-                            <h2>10368</h2>
-                            <span>utilizadores</span>
+                            <h2>@ViewBag.TotalUsers</h2>
+                            <span>Utilizadores</span>
                         </div>
                     </div>
                     <div class="overview-chart">
@@ -69,8 +69,8 @@
                             <i class="zmdi zmdi-shopping-cart"></i>
                         </div>
                         <div class="text">
-                            <h2>388,688</h2>
-                            <span>items solid</span>
+                            <h2>@ViewBag.TotalRent</h2>
+                            <span>Alugueres</span>
                         </div>
                     </div>
                     <div class="overview-chart">
@@ -87,8 +87,8 @@
                             <i class="zmdi zmdi-calendar-note"></i>
                         </div>
                         <div class="text">
-                            <h2>1,086</h2>
-                            <span>this week</span>
+                            <h2>@ViewBag.PendingRent</h2>
+                            <span>Pendentes</span>
                         </div>
                     </div>
                     <div class="overview-chart">
@@ -101,12 +101,12 @@
             <div class="overview-item overview-item--c4">
                 <div class="overview__inner">
                     <div class="overview-box clearfix">
-                        <div class="icon">
-                            <i class="zmdi zmdi-money"></i>
-                        </div>
                         <div class="text">
-                            <h2>$1,060,386</h2>
-                            <span>total earnings</span>
+                            <h2>@ViewBag.Earnings</h2>
+                            <span>Total Ganho</span>
+                        </div>
+                        <div class="icon">
+                            Mt
                         </div>
                     </div>
                     <div class="overview-chart">
@@ -116,7 +116,8 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    
+    <!--<div class="row">
         <div class="col-lg-12">
             <div class="overview-wrap">
                 <h2 class="title-1 m-b-25">Earnings By Items</h2>
@@ -133,9 +134,9 @@
                     <label for="cc-end" class="control-label mb-1">Data Fim</label>
                     <input id="cc-end" name="cc-end" type="date" class="form-control" aria-required="true" aria-invalid="false" style="min-width:200px;" value="@tEnd">
                 </div>
-                <div class="col-4">
+                <div class="col-4">-->
                     @*<label for="cc-filter" class="control-label mb-1"></label>*@
-                    <button class="au-btn-filter mt-4">
+                    <!--<button class="au-btn-filter mt-4">
                         <i class="zmdi zmdi-filter-list"></i>filters
                     </button>
                 </div>
@@ -144,12 +145,12 @@
             
         </div>
 
-    </div>
+    </div>-->
     
     <div class="row">
         <div class="col-md-12">
             <div class="copyright">
-                <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                <p>Copyright © @DateTime.Now.Year. All rights reserved.</p>
             </div>
         </div>
     </div>

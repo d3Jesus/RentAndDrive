@@ -72,3 +72,24 @@ VALUES ('CONSULTAR_FUNCIONARIOS','Permissão Para Consultar Funcionários'),
 		('REMOVER_ACESSOS_AOS_UTILIZADORES','Permissão Para Remover Acessos'),
 		('RESETAR_SENHA_DOS_UTILIZADORES','Permissão Para Resetar a Senha')
 GO
+
+-- 12/01/2022
+
+ALTER VIEW [dbo].[VW_ALUGUER]
+AS
+SELECT A.Id, C.Nome AS NomeCliente, F.Nome AS NomeFuncionario, CONCAT(Marca.Descricao, ', ', Modelo.Descricao, ', Matricula ', V.Matricula) AS Viatura,
+		V.Matricula, ISNULL(M.Nome, '-') AS NomeMotorista, A.DataAluguer, CONCAT(A.PeriodoAluguer, ' ', A.UnidadePeriodo) AS Periodo, A.Estado, A.DataDevolucao, P.ValorPago
+FROM ALUGUER A INNER JOIN PAGAMENTO P
+	ON A.Id = P.IdAluguer INNER JOIN VIATURA V
+	ON A.IdViatura = V.Matricula LEFT OUTER JOIN PESSOA M
+	ON A.IdMotorista = M.Id INNER JOIN PESSOA C
+	ON A.IdCliente = C.Id INNER JOIN PESSOA F
+	ON A.IdFuncionario = F.Id INNER JOIN VIATURA_HELPER Marca
+	ON V.Marca = Marca.IdHelper INNER JOIN VIATURA_HELPER Modelo
+	ON V.Modelo = Modelo.IdHelper
+GO
+
+UPDATE AspNetRoles
+SET Name = 'CONSULTAR_VIATURAS'
+WHERE Id = 'CONSULTAR_VIATURAS'
+GO

@@ -10,6 +10,7 @@
 
     string sucesso = TempData["sucesso"] as string;
     string falha = TempData["falha"] as string;
+    var informacao = TempData["informacao"] as string;
 
     ICollection<VwRoleDescription> notuserRoles = ViewData["notuserRoles"] as ICollection<VwRoleDescription>;
     ICollection<VwRoleDescription> userInRoles = ViewData["userInRoles"] as ICollection<VwRoleDescription>;
@@ -103,8 +104,9 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
+        <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Users")">Usu&aacute;rios</a></li>
-        <li class="breadcrumb-item active"><a href="#">Gerir Acessos</a></li>
+        <li class="breadcrumb-item active">Gerir Acessos</li>
     </ol>
 </nav>
 
@@ -125,6 +127,18 @@
     <div class="alert alert-danger" role="alert">
         <i class="zmdi zmdi-check-circle"></i>
         <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (informacao != null)
+{
+    <div class="alert alert-info" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@informacao</span>
         <button class="close" type="button" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">
                 <i class="zmdi zmdi-close-circle"></i>
@@ -171,7 +185,7 @@
                 @* REMOVER ACESSOS *@
                 <a href="@Url.Action("RemoverAcessos", "Users", routeValues: new { id = id })"
                    id="password" title="password" class="btn btn-outline-secondary btn-sm"
-                   style="float: right" >
+                   style="float: right">
                     <span class="fa fa-edit"></span> Remover Acesso
                 </a>
                 @* ADICIONAR ACESSOS *@

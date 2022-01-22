@@ -92,7 +92,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
-        <li class="breadcrumb-item active"><a href="#">Utilizadores e Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item active">Usu&aacute;rios</li>
     </ol>
 </nav>
 
@@ -196,7 +196,7 @@
                     <a href="@Url.Action("ResetPassword", "Account", routeValues: new { code = "rowId" })"
                        id="password" title="password" class="btn btn-outline-secondary btn-sm"
                        style="float: right" onclick="addParameter(this)">
-                        <span class="fa fa-edit"></span> Resetar Senha
+                        <span class="fa fa-edit"></span> Redefinir Senha
                     </a>
                 }
                 @if (User.IsInRole("GERIR_ACESSOS"))

@@ -31,6 +31,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
+        <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Funcionarios")">Funcion&aacute;rios</a></li>
         <li class="breadcrumb-item active" aria-current="page">Adicionar</li>
     </ol>
@@ -178,7 +179,7 @@
             </div>
         </div>
         <div class="card-footer bg-light">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+            <a href="@Url.Action("Index","Funcionarios")" class="btn btn-danger">Cancelar</a>
             <button type="submit" class="btn btn-success">Salvar</button>
         </div>
     </div>

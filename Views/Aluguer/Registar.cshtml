@@ -19,6 +19,7 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Vendas</li>
         <li class="breadcrumb-item"><a href="@Url.Action("Index", "Aluguer")">Aluguer</a></li>
         <li class="breadcrumb-item active" aria-current="page">Registar</li>
     </ol>
@@ -187,8 +188,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <button type="button" class="btn btn-sm btn-outline-danger" 
-                                    onclick="@Url.Action("Index","Aluguer")">Cancelar</button>
+                            <a href="@Url.Action("Index", "Aluguer")" class="btn btn-danger">Cancelar</a>
                             <span class="text-light" style="float: right">  | </span>
                             <button type="submit" class="btn btn-sm btn-outline-success">Salvar</button>
                         </div>

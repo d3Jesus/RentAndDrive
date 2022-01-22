@@ -40,7 +40,14 @@
     });
 </script>
 
-
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Parametriza&ccedil;&atilde;o</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index","Motoristas")">Motorista</a></li>
+        <li class="breadcrumb-item active">Viaturas Atribu&iacute;das</li>
+        <li class="breadcrumb-item active">Atribuir Viaturas</li>
+    </ol>
+</nav>
 
 @using (Html.BeginForm("AtribuirViaturas", "Motoristas", new { motorista }, FormMethod.Post, new { id = "formSaveRoles" }))
 {
@@ -82,7 +89,7 @@
 
             <div class="card-footer">
                 <center>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-danger" href="@Url.Action("ViaturasAtribuidas","Motoristas", new { id = motorista })">Cancelar</a>
                     <button type="submit" class="btn btn-success">Salvar</button>
                 </center>
             </div>

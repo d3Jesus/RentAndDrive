@@ -36,6 +36,20 @@ namespace RentAndDrive.Models.Alugueres.DAL
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwAluguers.ToList();
         }
+
+        public static List<VwAluguer> CarregarAluguersPeloEstado(string estado)
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwAluguers.Where(s => s.estado == estado).ToList();
+        }
+
+        public static decimal CarregarTotalGanhoAnual()
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwAluguers
+                    .Where(s => s.estado != "Cancelado" && s.dataAluguer.Year == DateTime.Now.Year)
+                    .ToList().Sum(s => s.valorPago);
+        }
         
         public static Aluguer CarregarAluguerPeloId(string al)
         {

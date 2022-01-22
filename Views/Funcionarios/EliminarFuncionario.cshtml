@@ -3,12 +3,19 @@
     ViewBag.Title = "EliminarFuncionario";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Utilizadores e Funcion&aacute;rios</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Funcionarios")">Funcion&aacute;rios</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+    </ol>
+</nav>
 
 @using (Html.BeginForm("EliminarFuncionario", "Funcionarios", FormMethod.Post))
 {
     <div class="card card-nav-tabs card-plain">
         <div class="card-header card-header-danger">
-            <h3 class="modal-title">Eliminar Viatura</h3>
+            <h3 class="modal-title">Eliminar Funcion&aacute;rio</h3>
         </div>
         <div class="card-body">
             @Html.AntiForgeryToken()
@@ -23,7 +30,7 @@
             </div>
         </div>
         <div class="card-footer bg-light">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">N&atilde;o</button>
+            <a href="@Url.Action("Index","Funcionarios")" class="btn btn-danger">N&atilde;o</a>
             <button type="submit" class="btn btn-success">Sim</button>
         </div>
     </div>

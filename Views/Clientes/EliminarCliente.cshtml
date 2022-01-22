@@ -3,6 +3,13 @@
     ViewBag.Title = "Eliminar Cliente";
 }
 
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Vendas</li>
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Clientes")">Clientes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
+    </ol>
+</nav>
 
 @using (Html.BeginForm("EliminarCliente", "Clientes", FormMethod.Post))
 {
@@ -14,7 +21,7 @@
             @Html.AntiForgeryToken()
             <div class="container-fluid">
                 <h5>
-                    Tem certeza que deseja eliminar a Cliente com o nome: <strong> @Model.nome</strong>?
+                    Tem certeza que deseja eliminar o cliente com o nome: <strong> @Model.nome</strong>?
                 </h5>
                 <div class="text-center">
                     <small style="width:100%; font-size: 16px;"><b> Atenção: </b>Ao confirmar, estará a eliminar definitivamente o registro deste cliente.</small>
@@ -23,7 +30,7 @@
             </div>
         </div>
         <div class="card-footer bg-light">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">N&atilde;o</button>
+            <a class="btn btn-danger" href="@Url.Action("Index","Clientes")">N&atilde;o</a>
             <button type="submit" class="btn btn-success">Sim</button>
         </div>
     </div>

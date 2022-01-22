@@ -81,7 +81,8 @@
 
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><a href="#">Aluguer</a></li>
+        <li class="breadcrumb-item active">Vendas</li>
+        <li class="breadcrumb-item active">Aluguer</li>
     </ol>
 </nav>
 
@@ -181,6 +182,17 @@
             <center>
 
                 @{
+                    if (User.IsInRole("TERMINAR_O_SERVICO_DE_ALUGUER"))
+                    {
+                        @* TERMINAR *@
+                        <span class="text-light" style="float: right">  | </span>
+                        <a href="@Url.Action(actionName: "Terminar", controllerName: "Aluguer", routeValues: new { al = "rowId" })"
+                           style="float: right" title="Terminar Aluguer"
+                           class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
+                            Terminar
+                        </a>
+                    }
+
                     if (User.IsInRole("CANCELAR_ALUGUER"))
                     {
                         @* CANCELAR *@

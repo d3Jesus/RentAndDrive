@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RentAndDrive.Models.Alugueres.DAL;
+using RentAndDrive.Models.Users.DAL;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -30,10 +32,10 @@ namespace RentAndDrive.Controllers
         [Authorize]
         public ActionResult Dashboard()
         {
-            var init = DateTime.Now.AddMonths(-1);
-            var end = DateTime.Now;
-            TempData["Ini"] = init.ToString("yyyy-MM-dd");
-            TempData["End"] = end.ToString("yyyy-MM-dd");
+            ViewBag.TotalUsers = UsersDal.GetAllUsers().Count;
+            ViewBag.TotalRent = DalAluguer.CarregarAluguers().Count;
+            ViewBag.PendingRent = DalAluguer.CarregarAluguersPeloEstado("Activo").Count;
+            ViewBag.Earnings = DalAluguer.CarregarTotalGanhoAnual();
             return View();
         }
     }
