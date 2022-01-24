@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Views/Aluguer/RegistarReserva.cshtml
+/Models/Alugueres/Mdl/VwReserva.cs
+/Views/Aluguer/Reservas.cshtml
