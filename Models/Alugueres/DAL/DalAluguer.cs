@@ -15,7 +15,7 @@ namespace RentAndDrive.Models.Alugueres.DAL
         {
             string serie = "ALRD" + DateTime.Now.Year;
             DataDbContext ctx = new DataDbContext();
-            string id = ctx.pessoas.Where(x => x.id.Contains(serie)).Max(x => x.id);
+            string id = ctx.aluguers.Where(x => x.id.Contains(serie)).Max(x => x.id);
             if (id == null)
             {
                 id = serie + "0000001";
@@ -35,6 +35,11 @@ namespace RentAndDrive.Models.Alugueres.DAL
         {
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwAluguers.ToList();
+        }
+        public static VwAluguer CarregarReserva(string reserva)
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwAluguers.Where(r => r.id == reserva).FirstOrDefault();
         }
 
         public static List<VwAluguer> CarregarAluguersPeloEstado(string estado)
@@ -122,6 +127,17 @@ namespace RentAndDrive.Models.Alugueres.DAL
                 var al = ctx.aluguers.Where(a => a.id == aluguer).FirstOrDefault();
                 al.estado = "Terminado";
                 al.dataDevolucao = DateTime.Now;
+                ctx.SaveChanges();
+                return true;
+            }
+        }
+
+        public static bool Pagamento(Pagamento pag)
+        {
+            using(DataDbContext ctx = new DataDbContext())
+            {
+                pag.data = DateTime.Now;
+                ctx.pagamentos.Add(pag);
                 ctx.SaveChanges();
                 return true;
             }
