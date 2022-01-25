@@ -1,4 +1,5 @@
 ﻿using RentAndDrive.Models.Alugueres.Mdl;
+using RentAndDrive.Models.Chart.Mdl;
 using RentAndDrive.Models.Pagamentos.Mdl;
 using RentAndDrive.Models.Pessoas.Mdl;
 using RentAndDrive.Models.Pessoas.Mdl.Cliente;
@@ -36,5 +37,6 @@ namespace RentAndDrive.Models.Db
         public DbSet<VwFuncionarioResumo> vwFuncionarioResumos { get; set; }
         public DbSet<VwCliente> vwClientes { get; set; }
         public DbSet<Pagamento> pagamentos { get; set; }
+        public DbSet<ComparisonBarChart> ComparisonBarCharts { get; set; }
     }
 }

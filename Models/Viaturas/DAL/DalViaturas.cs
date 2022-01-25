@@ -14,6 +14,21 @@ namespace RentAndDrive.Models.Viaturas.DAL
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwViaturas.ToList();
         }
+        public static List<VwViatura> GetViaturasDisponiveis()
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwViaturas.Where(d => d.estado == "Disponivel").ToList();
+        }
+        public static List<VwViatura> GetViaturasEmUso()
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwViaturas.Where(d => d.estado == "Ocupado").ToList();
+        }
+        public static List<VwViatura> GetViaturasForaDeUso()
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwViaturas.Where(d => d.estado == "Indisponivel").ToList();
+        }
 
         public static Viatura GetViaturaPelaMatricula(string matricula)
         {

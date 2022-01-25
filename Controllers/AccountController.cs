@@ -87,11 +87,19 @@ namespace RentAndDrive.Controllers
                         ModelState.AddModelError("", "Estas credenciais foram desactivadas. Contacte o administrador do sistema para as activar!");
                         return View(model);
                     }
+
                     Models.Users.Mdl.VwUsers users = UsersDal.GetUserByEmail(model.Email);
+
                     Session.Add("idFuncionario", users.id);
                     Session.Add("nomeFuncionario", users.nome);
                     Session.Add("emailFuncionario", users.email);
-                    return RedirectToAction(actionName: "Dashboard", controllerName: "Home");
+                    Session.Add("funcaoFuncionario", users.funcao);
+
+                    if(users.funcao.ToUpper().Equals("RECEPCIONISTA"))
+                        return RedirectToAction(actionName: "Dashboard", controllerName: "Home");
+                    else
+                        return RedirectToAction(actionName: "Dashboard2", controllerName: "Home");
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:

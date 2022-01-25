@@ -30,6 +30,8 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public string estado { get; set; }
         [Column("DataDevolucao")]
         public DateTime dataDevolucao { get; set; }
+        [Column("TIPO")]
+        public string tipo { get; set; }
         [NotMapped]
         public string marca { get; set; }
         [NotMapped]

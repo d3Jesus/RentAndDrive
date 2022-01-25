@@ -184,6 +184,8 @@
     <Compile Include="Models\Alugueres\DAL\DalAluguer.cs" />
     <Compile Include="Models\Alugueres\Mdl\Aluguer.cs" />
     <Compile Include="Models\Alugueres\Mdl\VwAluguer.cs" />
+    <Compile Include="Models\Alugueres\Mdl\VwAluguerReserva.cs" />
+    <Compile Include="Models\Chart\Mdl\ComparisonBarChart.cs" />
     <Compile Include="Models\Db\DataDbContext.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -614,8 +616,10 @@
     <Content Include="Views\Users\RemoverAcessos.cshtml" />
     <Content Include="Views\Aluguer\Registar.cshtml" />
     <Content Include="Views\Aluguer\Index.cshtml" />
-    <Content Include="Views\Aluguer\AlguerActivo.cshtml" />
+    <Content Include="Views\Aluguer\Reserva.cshtml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Home\Dashboard2.cshtml" />
+    <Content Include="Views\Aluguer\RegistarReserva.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

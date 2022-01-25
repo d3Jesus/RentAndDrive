@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<RentAndDrive.Models.Alugueres.Mdl.VwAluguer>
 @{
-    ViewBag.Title = "Aluguer Activo";
+    ViewBag.Title = "Aluguer";
     var sucesso = TempData["sucesso"] as string;
     var falha = TempData["falha"] as string;
 }
@@ -82,7 +82,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active">Vendas</li>
-        <li class="breadcrumb-item active">Aluguer Activo</li>
+        <li class="breadcrumb-item active">Reserva</li>
     </ol>
 </nav>
 
@@ -115,7 +115,7 @@
     <div class="card mb-2">
         <div class="card-header">
             <i class="fas fa-table mr-1"></i>
-            Aluguer Activo
+            Reservas
         </div>
 
         <div class="card-body">
@@ -136,7 +136,7 @@
                                 @Html.DisplayName("Motorista")
                             </th>
                             <th style="font-size:10px; font:bold">
-                                @Html.DisplayName("Data Aluguer")
+                                @Html.DisplayName("Reserva Para")
                             </th>
                             <th style="font-size:10px; font:bold">
                                 @Html.DisplayName("Periodo")
@@ -180,21 +180,28 @@
 
         <div class="card-footer">
             <center>
+                @* ENTREGAR *@
+                <span class="text-light" style="float: right">  | </span>
+                <a href="@Url.Action(actionName: "RegistrarEntrega", routeValues: new { al = "rowId" })"
+                   style="float: right" title="Cancelar"
+                   class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
+                    Registar Entrega
+                </a>
 
                 @* CANCELAR *@
                 <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "CancelarAluguer", routeValues: new { id = "rowId" })"
+                <a href="@Url.Action(actionName: "CancelarReserva", routeValues: new { al = "rowId" })"
                    style="float: right" title="Cancelar"
                    class="btn btn-sm btn-outline-danger" onclick="addParameter(this)">
                     Cancelar
                 </a>
 
-                @* TERMINAR *@
+                @* ADICIONAR *@
                 <span class="text-light" style="float: right">  | </span>
-                <a href="@Url.Action(actionName: "Terminar", controllerName: "Aluguer", routeValues: new { al = "rowId" })"
-                   style="float: right" title="Terminar Aluguer"
-                   class="btn btn-sm btn-outline-success" onclick="addParameter(this)">
-                    Terminar
+                <a href="@Url.Action(actionName: "RegistarReserva", controllerName: "Aluguer")"
+                   style="float: right" title="Registar Reserva"
+                   class="btn btn-sm btn-outline-success">
+                    Adicionar
                 </a>
             </center>
         </div>

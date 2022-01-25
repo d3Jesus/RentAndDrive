@@ -14,6 +14,8 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public string id { get; set; }
         [Column("NomeCliente")]
         public string nomeCliente { get; set; }
+        [Column("IDFuncionario")]
+        public string idFuncionario { get; set; }
         [Column("NomeFuncionario")]
         public string nomeFuncionario { get; set; }
         [Column("Viatura")]
@@ -32,5 +34,7 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public DateTime dataDevolucao { get; set; }
         [Column("ValorPago")]
         public decimal valorPago { get; set; }
+        [Column("TIPO")]
+        public string tipo { get; set; }
     }
 }

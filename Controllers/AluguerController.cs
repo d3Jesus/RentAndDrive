@@ -18,7 +18,7 @@ namespace RentAndDrive.Controllers
         [Authorize(Roles = "CONSULTAR_ALUGUERES")]
         public ActionResult Index()
         {
-            return View(DalAluguer.CarregarAluguers());
+            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "ALUGUER"));
         }
 
         [HttpGet]
@@ -27,17 +27,17 @@ namespace RentAndDrive.Controllers
         {
             // Marcas das viaturas
             ViewData["Marcas"] = DalViaturas.GetViaturaHelpersPeloTipo("Marca");
-            return View(new Aluguer());
+            return View(new VwAluguerReserva());
         }
 
         [HttpPost]
-        public ActionResult Registar(Aluguer aluguer)
+        public ActionResult Registar(VwAluguerReserva aluguer)
         {
-            aluguer.IdFuncionario = Session["idFuncionario"] as string;
-            aluguer.valor = DalViaturas.GetViaturaPelaMatricula(aluguer.IdViatura).valorAluguer;
-            if (DalAluguer.Registar(aluguer))
+            aluguer.idFuncionario = Session["idFuncionario"] as string;
+            aluguer.valor = DalViaturas.GetViaturaPelaMatricula(aluguer.idViatura).valorAluguer;
+            if (DalAluguer.Registar(aluguer, "ALUGUER", DateTime.Now.Date))
             {
-                if(DalViaturas.AlterarEstado(aluguer.IdViatura, "Ocupado"))
+                if(DalViaturas.AlterarEstado(aluguer.idViatura, "Ocupado"))
                     TempData["sucesso"] = "Aluguer registada com sucesso!";
             }
             else
@@ -45,14 +45,14 @@ namespace RentAndDrive.Controllers
             return RedirectToAction(nameof(Index));
         }
         
-        [HttpGet]
-        [Authorize(Roles = "CONSULTAR_ALUGUER_ACTIVO")]
-        public ActionResult AlguerActivo()
-        {
-            return View(DalAluguer.CarregarAluguers().Where(a => a.estado == "Activo").ToList());
-        }
+        //[HttpGet]
+        //[Authorize(Roles = "CONSULTAR_ALUGUER_ACTIVO")]
+        //public ActionResult AlguerActivo()
+        //{
+        //    return View(DalAluguer.CarregarAluguers().Where(a => a.estado == "Activo").ToList());
+        //}
 
-        //[HttpPost]
+        [HttpGet]
         [Authorize(Roles = "CANCELAR_ALUGUER")]
         public ActionResult CancelarAluguer(string al)
         {
@@ -79,14 +79,55 @@ namespace RentAndDrive.Controllers
             if(al == null || al == "" || al == "rowId")
             {
                 TempData["falha"] = "Selecione o aluguer que deseja terminar!";
-                return RedirectToAction(nameof(AlguerActivo));
+                return RedirectToAction(nameof(Index));
             }
             if (DalAluguer.Devolver(al))
                 TempData["sucesso"] = "Aluguer terminado com sucesso!";
             else
                 TempData["falha"] = "Ocorreu um erro ao terminar o aluguer. Tente novamente mais tarde!";
-            return RedirectToAction(nameof(AlguerActivo));
+            return RedirectToAction(nameof(Index));
         }
+        #endregion
+
+        #region RESERVA
+        public ActionResult Reserva()
+        {
+            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "RESERVA"));
+        }
+
+        public ActionResult RegistarReserva()
+        {
+            // Marcas das viaturas
+            ViewData["Marcas"] = DalViaturas.GetViaturaHelpersPeloTipo("Marca");
+            return View(new VwAluguerReserva());
+        }
+
+        [HttpPost]
+        public ActionResult RegistarReserva(VwAluguerReserva aluguer)
+        {
+            aluguer.idFuncionario = Session["idFuncionario"] as string;
+            aluguer.valor = DalViaturas.GetViaturaPelaMatricula(aluguer.idViatura).valorAluguer;
+            if (DalAluguer.Registar(aluguer, "RESERVA", aluguer.dataAluguer))
+                TempData["sucesso"] = "Reserva registada com sucesso!";
+            else
+                TempData["falha"] = "Ocorreu um erro ao registar a reserva. Tente novamente mais tarde!";
+            return RedirectToAction(nameof(Reserva));
+        }
+
+        public ActionResult RegistrarEntrega(string al)
+        {
+            if (al == null || al == "" || al == "rowId")
+            {
+                TempData["falha"] = "Selecione a reserva que deseja registar a entrega!";
+                return RedirectToAction(nameof(Reserva));
+            }
+            if (DalAluguer.Devolver(al))
+                TempData["sucesso"] = "Viatura entregue !";
+            else
+                TempData["falha"] = "Ocorreu um erro ao registar a entrega da viatura. Tente novamente mais tarde!";
+            return RedirectToAction(nameof(Reserva));
+        }
+
         #endregion
 
         #region Fetch
