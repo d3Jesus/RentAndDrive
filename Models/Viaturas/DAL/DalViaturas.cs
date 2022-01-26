@@ -14,6 +14,11 @@ namespace RentAndDrive.Models.Viaturas.DAL
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwViaturas.ToList();
         }
+        public static decimal GetValorUnitarioViatura(string matricula)
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwViaturas.Where(v => v.matricula == matricula).FirstOrDefault().valorAluguer;
+        }
         public static List<VwViatura> GetViaturasDisponiveis()
         {
             using (DataDbContext ctx = new DataDbContext())

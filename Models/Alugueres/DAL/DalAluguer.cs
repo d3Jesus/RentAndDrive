@@ -143,15 +143,21 @@ namespace RentAndDrive.Models.Alugueres.DAL
                                 total = aluguer.periodo * 30 * aluguer.valor;
                         }
 
-                    Pagamento pagamento = new Pagamento()
+                    #region PAGAMENTO
+                    if(tipo.ToUpper().Equals("ALUGUER"))
                     {
-                        data = DateTime.Now,
-                        valorPago = total,
-                        funcionario = aluguer.idFuncionario,
-                        aluguer = aluguer.idAluguer
-                    };
-                    ctx.pagamentos.Add(pagamento);
-                    ctx.SaveChanges();
+                        Pagamento pagamento = new Pagamento()
+                        {
+                            data = DateTime.Now,
+                            valorPago = total,
+                            funcionario = aluguer.idFuncionario,
+                            aluguer = aluguer.idAluguer
+                        };
+                        ctx.pagamentos.Add(pagamento);
+                        ctx.SaveChanges();
+                    }
+                    #endregion
+
                     tran.Commit();
                     return true;
                 }
@@ -174,16 +180,31 @@ namespace RentAndDrive.Models.Alugueres.DAL
             }
         }
 
-        public static bool Devolver(string aluguer)
+        public static bool Devolver(string alug)
         {
             using(DataDbContext ctx = new DataDbContext())
+            using(var tran = ctx.Database.BeginTransaction())
             {
-                var al = ctx.aluguers.Where(a => a.id == aluguer).FirstOrDefault();
-                al.estado = "Terminado";
-                al.dataDevolucao = DateTime.Now;
-                DalViaturas.AlterarEstado(al.IdViatura, "Devolvido");
-                ctx.SaveChanges();
-                return true;
+                try
+                {
+
+                    // alterar o estado do aluguer
+                    var al = ctx.aluguers.Where(a => a.id == alug).FirstOrDefault();
+                    al.estado = "Terminado";
+                    al.dataDevolucao = DateTime.Now;
+                    ctx.SaveChanges();
+
+                    // alterar o estado da viatura
+                    DalViaturas.AlterarEstado(al.IdViatura, "Devolvido");
+                    tran.Commit();
+                    return true;
+                }
+                catch(Exception e)
+                {
+                    tran.Rollback();
+                    Console.WriteLine(e.InnerException);
+                    return false;
+                }
             }
         }
 
@@ -198,6 +219,23 @@ namespace RentAndDrive.Models.Alugueres.DAL
         {
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwAluguers.Where(r => r.id == reserva).FirstOrDefault();
+        }
+
+        public static bool Entrega(Pagamento pag)
+        {
+            using (DataDbContext ctx = new DataDbContext())
+            {
+                // registar pagamento
+                ctx.pagamentos.Add(pag);
+                ctx.SaveChanges();
+
+                // alterar o estado do aluguer
+                var al = ctx.aluguers.Where(a => a.id == pag.aluguer).FirstOrDefault();
+                al.estado = "Activo";
+                ctx.SaveChanges();
+                return true;
+
+            }
         }
         #endregion
         #region OUTROS
@@ -221,16 +259,30 @@ namespace RentAndDrive.Models.Alugueres.DAL
                 return ctx.Database.SqlQuery<ComparisonBarChart>(query).ToList();
             }
         }
-        #endregion
-        public static bool Pagamento(Pagamento pag)
+
+        public static VwAluguerReserva ResumoParaEntrega(string reserva)
         {
-            using(DataDbContext ctx = new DataDbContext())
+            using (DataDbContext ctx = new DataDbContext())
             {
-                pag.data = DateTime.Now;
-                ctx.pagamentos.Add(pag);
-                ctx.SaveChanges();
-                return true;
+                return ctx.vwAluguerReservas.Where(r => r.idAluguer == reserva).FirstOrDefault();
             }
         }
+
+        public static decimal helper(int periodo, string unidade, decimal valorUnit)
+        {
+            decimal total = 0;
+            if (periodo > 0)
+                if (unidade != "0")
+                {
+                    if (unidade == "Dia")
+                        total = periodo * valorUnit;
+                    if (unidade == "Semana")
+                        total = periodo * 7 * valorUnit;
+                    if (unidade == "Mes")
+                        total = periodo * 30 * valorUnit;
+                }
+            return total;
+        }
+        #endregion
     }
 }

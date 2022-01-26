@@ -1,5 +1,6 @@
 ﻿using RentAndDrive.Models.Alugueres.DAL;
 using RentAndDrive.Models.Alugueres.Mdl;
+using RentAndDrive.Models.Pagamentos.Mdl;
 using RentAndDrive.Models.Pessoas.DAL;
 using RentAndDrive.Models.Viaturas.DAL;
 using System;
@@ -18,7 +19,7 @@ namespace RentAndDrive.Controllers
         [Authorize(Roles = "CONSULTAR_ALUGUERES")]
         public ActionResult Index()
         {
-            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "ALUGUER"));
+            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "ALUGUER" || a.estado != "Reservado"));
         }
 
         [HttpGet]
@@ -74,7 +75,7 @@ namespace RentAndDrive.Controllers
         
         [HttpGet]
         [Authorize(Roles = "TERMINAR_O_SERVICO_DE_ALUGUER")]
-        public ActionResult Terminar(string al)
+        public ActionResult Devolucao(string al)
         {
             if(al == null || al == "" || al == "rowId")
             {
@@ -92,8 +93,55 @@ namespace RentAndDrive.Controllers
         #region RESERVA
         public ActionResult Reserva()
         {
-            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "RESERVA"));
+            return View(DalAluguer.CarregarAluguers().Where(a => a.tipo.ToUpper() == "RESERVA" && a.estado != "Activo"));
         }
+
+        public ActionResult RegistrarEntrega(string al)
+        {
+            if (al == null || al == "" || al == "rowId")
+            {
+                TempData["falha"] = "Selecione a reserva cuja viatura deseja entregar!";
+                return RedirectToAction(nameof(Index));
+            }
+            var data = DalAluguer.ResumoParaEntrega(al);
+            //if (data.dataAluguer > DateTime.Now.Date)
+            //{
+            //    TempData["falha"] = "O cliente só poderá levar a viatura na data a qual reservou a viatura!";
+            //    return RedirectToAction(nameof(Reserva));
+            //}
+            //if (data.dataAluguer < DateTime.Now.Date)
+            //{
+            //    TempData["falha"] = "A data da reserva foi ultrapassada!";
+            //    return RedirectToAction(nameof(Reserva));
+            //}
+            var valorAluguer = DalViaturas.GetValorUnitarioViatura(data.idViatura);
+            decimal total = DalAluguer.helper(data.periodo, data.unidade, valorAluguer);
+            ViewData["ValorTotal"] = total;
+            data.valor = total;
+            return View(data);
+        }
+        [HttpPost]
+        public ActionResult RegistrarEntrega(VwAluguerReserva al)
+        {
+            al.idFuncionario = Session["idFuncionario"] as string;
+            Pagamento p = new Pagamento()
+            {
+                data = DateTime.Now,
+                valorPago = al.valor,
+                funcionario = al.idFuncionario,
+                aluguer = al.idAluguer
+            };
+
+            if (DalAluguer.Entrega(p))
+                TempData["sucesso"] = "Entrega realizada com sucesso!";
+            else
+                TempData["falha"] = "Ocorreu um erro ao registar a entrega da viatura. Tente novamente mais tarde!";
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
 
         public ActionResult RegistarReserva()
         {
@@ -114,19 +162,19 @@ namespace RentAndDrive.Controllers
             return RedirectToAction(nameof(Reserva));
         }
 
-        public ActionResult RegistrarEntrega(string al)
-        {
-            if (al == null || al == "" || al == "rowId")
-            {
-                TempData["falha"] = "Selecione a reserva que deseja registar a entrega!";
-                return RedirectToAction(nameof(Reserva));
-            }
-            if (DalAluguer.Devolver(al))
-                TempData["sucesso"] = "Viatura entregue !";
-            else
-                TempData["falha"] = "Ocorreu um erro ao registar a entrega da viatura. Tente novamente mais tarde!";
-            return RedirectToAction(nameof(Reserva));
-        }
+        //public ActionResult RegistrarEntrega(string al)
+        //{
+        //    if (al == null || al == "" || al == "rowId")
+        //    {
+        //        TempData["falha"] = "Selecione a reserva que deseja registar a entrega!";
+        //        return RedirectToAction(nameof(Reserva));
+        //    }
+        //    if (DalAluguer.Devolver(al))
+        //        TempData["sucesso"] = "Viatura entregue !";
+        //    else
+        //        TempData["falha"] = "Ocorreu um erro ao registar a entrega da viatura. Tente novamente mais tarde!";
+        //    return RedirectToAction(nameof(Reserva));
+        //}
 
         #endregion
 

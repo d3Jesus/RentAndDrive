@@ -38,5 +38,6 @@ namespace RentAndDrive.Models.Db
         public DbSet<VwCliente> vwClientes { get; set; }
         public DbSet<Pagamento> pagamentos { get; set; }
         public DbSet<ComparisonBarChart> ComparisonBarCharts { get; set; }
+        public DbSet<VwAluguerReserva> vwAluguerReservas{ get; set; }
     }
 }

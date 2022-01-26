@@ -36,6 +36,8 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public string idFuncionario { get; set; }
         [Column("IdViatura")]
         public string idViatura { get; set; }
+        [Column("Viatura")]
+        public string viatura { get; set; }
         [Column("IdMotorista")]
         public string idMotorista { get; set; }
         [Column("PeriodoAluguer")]
@@ -50,8 +52,10 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         public DateTime dataDevolucao { get; set; }
 
         #region NOT MAPPED
+        #region Cliente
         [NotMapped]
         public string idCliente { get; set; }
+        #endregion
 
         [NotMapped]
         public string marca { get; set; }
@@ -65,6 +69,7 @@ namespace RentAndDrive.Models.Alugueres.Mdl
         [NotMapped]
         public decimal valor { get; set; }
 
+        #region Morada
         [NotMapped]
         public string avenida { get; set; }
 
@@ -73,6 +78,7 @@ namespace RentAndDrive.Models.Alugueres.Mdl
 
         [NotMapped]
         public int quarteirao { get; set; }
+        #endregion
         #endregion
     }
 }

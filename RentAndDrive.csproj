@@ -620,6 +620,7 @@
     <Content Include="Views\Account\ChangePassword.cshtml" />
     <Content Include="Views\Home\Dashboard2.cshtml" />
     <Content Include="Views\Aluguer\RegistarReserva.cshtml" />
+    <Content Include="Views\Aluguer\RegistrarEntrega.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

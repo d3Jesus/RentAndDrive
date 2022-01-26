@@ -1,0 +1,135 @@
+﻿@model RentAndDrive.Models.Alugueres.Mdl.VwAluguerReserva
+@{
+    ViewBag.Title = "Registar Entrega";
+    string total = ViewData["ValorTotal"] as string;
+    var tt = Model.valor;
+    var a = "";
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Vendas</li>
+        <li class="breadcrumb-item active"><a href="@Url.Action("Reserva","Aluguer")">Reservas</a></li>
+        <li class="breadcrumb-item active">Registar Entrega</li>
+    </ol>
+</nav>
+@using (Html.BeginForm("RegistrarEntrega", "Aluguer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Ocorreu um erro ao registar a entrega!. Corrija os erros e tente novamente")
+
+    <div class="card mb-4">
+        <div class="card mb-2">
+            <div class="card-header">
+                <i class="fas fa-table mr-1"></i>
+                Registar Entrega da Viatura
+            </div>
+
+            <div class="card-body">
+                @Html.HiddenFor(model => model.idAluguer)
+                @Html.HiddenFor(model => model.valor)
+                <div class="row badge-info rounded">
+                    <div class="col-lg-6">
+                        <table>
+                            <tbody>
+                                <tr class="border_bottom">
+                                    <td style="width:70%"><b>Nome do Cliente</b>:</td>
+                                    <td>@Html.Label(Model.nome, htmlAttributes: new { @class = "control-label" })</td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>Estado Civil</b>:</td>
+                                    <td>@Html.Label(Model.estadoCivil, htmlAttributes: new { @class = "control-label" })</td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>Tipo Identifica&ccedil;&atilde;o</b>:</td>
+                                    <td>@Html.Label(Model.tipoIdent, htmlAttributes: new { @class = "control-label" })</td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>N Identifica&ccedil;&atilde;o</b>:</td>
+                                    <td>@Html.Label(Model.numeroIdent, htmlAttributes: new { @class = "control-label" })</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <table>
+                            <tbody>
+                                <tr class="border_bottom">
+                                    <td style="width:45%"><b>N Carta</b>:</td>
+                                    <td>
+                                        @{
+                                            if (Model.numeroCarta == null)
+                                            {
+                                                @Html.Label("", htmlAttributes: new { @class = "control-label" })
+                                            }
+                                            else
+                                            {
+                                                @Html.Label(Model.numeroCarta, htmlAttributes: new { @class = "control-label" })
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>C&oacute;digo Carta</b>:</td>
+                                    <td>
+                                        @{
+                                            if (Model.codigoCarta == null)
+                                            {
+                                                @Html.Label("", htmlAttributes: new { @class = "control-label" })
+                                            }
+                                            else
+                                            {
+                                                @Html.Label(Model.numeroCarta, htmlAttributes: new { @class = "control-label" })
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>Validade Carta</b>:</td>
+                                    <td>
+                                        @{
+                                            if (Model.validadeCarta.GetValueOrDefault().ToString("dd-MM-yyyy") == "01-01-0001")
+                                            {
+                                                @Html.Label("", htmlAttributes: new { @class = "control-label" })
+                                            }
+                                            else
+                                            {
+                                                @Html.Label(Model.validadeCarta.GetValueOrDefault().ToString("dd-MM-yyyy"), htmlAttributes: new { @class = "control-label" })
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>Viatura</b>:</td>
+                                    <td>@Html.Label(Model.viatura, htmlAttributes: new { @class = "control-label" })</td>
+                                </tr>
+                                <tr class="border_bottom">
+                                    <td><b>Total</b>:</td>
+                                    <td>@tt Mt</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <center>
+                    @* CANCELAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <a href="@Url.Action(actionName: "Reserva", controllerName: "Aluguer")"
+                       style="float: right" title="Cancelar Entrega"
+                       class="btn btn-sm btn-outline-danger">
+                        Cancelar
+                    </a>
+
+                    @* PAGAR *@
+                    <span class="text-light" style="float: right">  | </span>
+                    <button type="submit" class="btn btn-sm btn-outline-success" style="float: right">Pagar</button>
+                </center>
+            </div>
+        </div>
+    </div>
+}

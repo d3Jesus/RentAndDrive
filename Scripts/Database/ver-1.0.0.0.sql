@@ -130,3 +130,32 @@ FROM PESSOA PSS INNER JOIN PESSOA_USUARIO PSSU
 	ON PSS.Id = PSSU.IdPessoa INNER JOIN AspNetUsers
 	ON PSSU.IdUsuario = AspNetUsers.Id
 GO
+
+-- criando a view da reserva
+CREATE VIEW [dbo].[VW_RESERVA]
+AS
+SELECT PESSOA.Id AS IdPessoa, PESSOA.Nome, PESSOA.Tipo, PESSOA.Sexo, PESSOA.EstadoCivil, 
+	PESSOA.TipoDeIdentificacao, PESSOA.NumeroIdentificacao, PESSOA.NumeroCarta, 
+	PESSOA.CodigoCarta, PESSOA.ValidadeCarta, ALUGUER.Id AS IdAluguer, ALUGUER.IdFuncionario, 
+	ALUGUER.IdViatura,  ALUGUER.IdMotorista, ALUGUER.PeriodoAluguer, CONCAT(MARCA.Descricao, ', ', MODELO.Descricao, ', ', ALUGUER.IdViatura) AS Viatura,
+	ALUGUER.UnidadePeriodo, ALUGUER.Estado, ALUGUER.DataAluguer, ALUGUER.DataDevolucao
+FROM PESSOA INNER JOIN ALUGUER ON PESSOA.Id = ALUGUER.IdCliente INNER JOIN VIATURA
+		ON ALUGUER.IdViatura = VIATURA.Matricula INNER JOIN VIATURA_HELPER MARCA ON
+		VIATURA.Marca = MARCA.IdHelper INNER JOIN VIATURA_HELPER MODELO ON
+		VIATURA.Modelo = MODELO.IdHelper
+GO
+
+-- adicionando o distinct
+ALTER VIEW [dbo].[VW_ALUGUER]
+AS
+SELECT DISTINCT A.Id, C.Id AS IdFuncionario, C.Nome AS NomeCliente, F.Nome AS NomeFuncionario, CONCAT(Marca.Descricao, ', ', Modelo.Descricao, ', Matricula ', V.Matricula) AS Viatura,
+		V.Matricula, ISNULL(M.Nome, '-') AS NomeMotorista, A.DataAluguer, CONCAT(A.PeriodoAluguer, ' ', A.UnidadePeriodo) AS Periodo, A.Estado, A.DataDevolucao, P.ValorPago, A.TIPO
+FROM ALUGUER A INNER JOIN PAGAMENTO P
+	ON A.Id = P.IdAluguer INNER JOIN VIATURA V
+	ON A.IdViatura = V.Matricula LEFT OUTER JOIN PESSOA M
+	ON A.IdMotorista = M.Id INNER JOIN PESSOA C
+	ON A.IdCliente = C.Id INNER JOIN PESSOA F
+	ON A.IdFuncionario = F.Id INNER JOIN VIATURA_HELPER Marca
+	ON V.Marca = Marca.IdHelper INNER JOIN VIATURA_HELPER Modelo
+	ON V.Modelo = Modelo.IdHelper
+GO
