@@ -1,0 +1,539 @@
+﻿@using RentAndDrive.Models.Viaturas.Mdl
+@model RentAndDrive.Models.Alugueres.Mdl.VwAluguerReserva
+@{
+    ViewBag.Title = "Registar Reserva";
+    List<ViaturaHelper> marcas = ViewData["Marcas"] as List<ViaturaHelper>;
+    List<SelectListItem> motor = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "Sim", Selected = true, Value = "Sim"},
+        new SelectListItem() { Text = "Não", Selected = false, Value = "Nao"}
+    };
+    List<SelectListItem> unidade = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "Dia(s)", Selected = false, Value = "Dia"},
+        new SelectListItem() { Text = "Semana(s)", Selected = false, Value = "Semana"},
+        new SelectListItem() { Text = "Mês(es)", Selected = false, Value = "Mes"}
+    };
+
+    List<SelectListItem> listaSexo = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "Masculino", Selected = true, Value = "Masculino"},
+        new SelectListItem() { Text = "Feminino", Selected = false, Value = "Feminino"}
+    };
+    List<SelectListItem> listaEstadoCivil = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "Solteiro(a)", Selected = true, Value = "Solteiro"},
+        new SelectListItem() { Text = "Casado(a)", Selected = false, Value = "Casado"},
+        new SelectListItem() { Text = "Divorciado(a)", Selected = false, Value = "Divorciado"},
+        new SelectListItem() { Text = "Viúvo(a)", Selected = false, Value = "Viúvo"}
+    };
+    List<SelectListItem> listaTipoIdent = new List<SelectListItem>
+{
+        new SelectListItem() { Text = "BI", Selected = true, Value = "BI"},
+        new SelectListItem() { Text = "Passaporte", Selected = false, Value = "Passaporte"},
+        new SelectListItem() { Text = "DIRE", Selected = false, Value = "DIRE"}
+    };
+}
+
+<script>
+    function myFunction() {
+        // Get the checkbox
+        var checkBox = document.getElementById("myCheck");
+        // Get the output text
+        var clientname = document.getElementById("clientname");
+        var clientID = document.getElementById("clientID");
+        var btn1 = document.getElementById("btn1");
+
+        var divSearch = document.getElementById("search");
+        var divVehicle = document.getElementById("editable");
+        var divClient = document.getElementById("clientData");
+
+        // If the checkbox is checked, display the output text
+        if (checkBox.checked == true) {
+            clientname.disabled = true;
+            clientID.disabled = true;
+            btn1.disabled = true;
+
+            divSearch.style.display = "block";
+            divVehicle.style.display = "block";
+            divClient.style.display = "block";
+        } else {
+            clientname.disabled = false;
+            clientID.disabled = false;
+            btn1.disabled = false;
+
+            divSearch.style.display = "none";
+            divVehicle.style.display = "none";
+            divClient.style.display = "none";
+        }
+    }
+</script>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">Vendas</li>
+        <li class="breadcrumb-item"><a href="@Url.Action(controllerName: "Aluguer", actionName:"Reserva")">Reserva</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Registar</li>
+    </ol>
+</nav>
+
+@using (Html.BeginForm("RegistarReserva", "Aluguer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "Ocorreu um erro ao tentar registar o aluguer!. Corrija os erros e tente novamente")
+
+    <div class="card card-nav-tabs card-plain">
+        <div class="card-header card-header-danger">
+            Registar Reserva
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        @Html.Label("Nome do Cliente", htmlAttributes: new { @class = "control-label", @style = "font-size:12px" })
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="fa fa-search-minus"></i></span>
+                            </div>
+                            @Html.TextBox("client", null, new { @id = "clientname", @class = "form-control", @required = "required", @placeholder = "Nome do cliente", style = "font-size:12px;" })
+
+                            &emsp;
+                            &emsp;
+                            <label>
+                                <input type="checkbox" name="remember" id="myCheck" onclick="myFunction();"> Primeira Vez
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="container-fluid">
+                    <p id="alert1" class="text-danger" style="display:none">Para procurar um cliente deve primeiro preencher o campo Nome do Cliente!</p>
+                    <div class="btn-group">
+                        <button id="btn1" type="button" class="btn btn-sm btn-outline-primary" data-toggle="tooltip" title="Procurar um cliente pelo nome" onclick="pesquisar()">
+                            <i class="fas fa-search"></i> Procurar cliente
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="search" style="display:none">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            @Html.Label("Clientes Encontrados", htmlAttributes: new { @class = "control-label", @style = "font-size:12px" })
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-list-alt"></i></span>
+                                </div>
+                                @Html.DropDownListFor(m => m.idCliente, new SelectList(string.Empty, "Value", "Text"), "Selecione o cliente", new
+                                {
+                                        @class = "form-control",
+                                        @id = "clientID",
+                                        @name = "clientID",
+                                        @onchange = "getClientData(this.value)",
+                                        @style = "font-size: 12px",
+                                        @required = "required"
+                                })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="clientData" class="card-body" style="display: none;">
+                <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                        <ul class="nav nav-tabs" data-tabs="tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active text-primary" href="#personal" data-toggle="tab"><strong>Dados do Cliente</strong></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="personal">
+                        <div class="row">
+                            <div class="form-group col-xs-6 col-md-6 col-lg-5">
+                                @Html.Label("Nome:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.nome, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.nome, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Sexo:", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.sexo, new SelectList(listaSexo, "Value", "Text"), "Selecione o sexo", new
+                                {
+                                    @class = "form-control",
+                                    style = "font-size:12px"
+                                })
+                                @Html.ValidationMessageFor(m => m.sexo, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-4">
+                                @Html.Label("Estado Civil:", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.estadoCivil, new SelectList(listaEstadoCivil, "Value", "Text"), "Selecione o estado civil", new
+                                {
+                                    @class = "form-control",
+                                    style = "font-size:12px"
+                                })
+                                @Html.ValidationMessageFor(m => m.estadoCivil, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Tipo de Identificação:", htmlAttributes: new { @class = "control-label" })
+                                @Html.DropDownListFor(m => m.tipoIdent, new SelectList(listaTipoIdent, "Value", "Text"), "Selecione o tipo de documento", new
+                                {
+                                    @class = "form-control",
+                                    style = "font-size:12px"
+                                })
+                                @Html.ValidationMessageFor(m => m.tipoIdent, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Número de Identificação:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.numeroIdent, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.numeroIdent, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Número da Carta:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.numeroCarta, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.numeroCarta, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Código da Carta:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.codigoCarta, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.codigoCarta, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Valiade da Carta:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.validadeCarta, htmlAttributes: new { @class = "form-control", @type = "date" })
+                                @Html.ValidationMessageFor(m => m.validadeCarta, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-6">
+                                @Html.Label("Avenida:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.avenida, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                                @Html.ValidationMessageFor(m => m.avenida, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Rua:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.rua, htmlAttributes: new { @class = "form-control", autocomplete = "new-password" })
+                                @Html.ValidationMessageFor(m => m.rua, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group col-xs-6 col-md-6 col-lg-3">
+                                @Html.Label("Quarteirao:", htmlAttributes: new { @class = "control-label" })
+                                @Html.TextBoxFor(m => m.quarteirao, htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(m => m.quarteirao, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <div id="editable" class="container-fluid border rounded" style="display:none;">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Marca:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.marca, new SelectList(marcas, "id", "descricao"), "Selecione a marca", new
+                            {
+                                @class = "form-control",
+                                style = "font-size:12px",
+                                @onchange = "pegarModelos(this.value)",
+                                @required = "required"
+                            })
+                            @Html.ValidationMessageFor(m => m.marca, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Modelo:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.modelo, new SelectList(string.Empty, "id", "descricao"), "Selecione o modelo", new
+                            {
+                                    @class = "form-control",
+                                    @id = "idModelo",
+                                    @name = "idModelo",
+                                    @onchange = "populaListaDeViaturas(this.value)",
+                                    @style = "font-size: 12px",
+                                    @required = "required"
+                            })
+                            @Html.ValidationMessageFor(m => m.modelo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Matricula:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.idViatura, new SelectList(string.Empty, "id", "descricao"), "Selecione a matricula", new
+                            {
+                                    @class = "form-control",
+                                    @id = "idMatricula",
+                                    @name = "idMatricula",
+                                    @onchange = "populaListaDeMotoristas(this.value)",
+                                    @style = "font-size: 12px",
+                                    @required = "required"
+                            })
+                            @Html.ValidationMessageFor(m => m.idViatura, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Com Motorista:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.modelo, new SelectList(motor, "Value", "Text"), new
+                            {
+                                    @class = "form-control",
+                                    @id = "idCMotor",
+                                    @name = "idCMotor",
+                                    @style = "font-size: 12px",
+                                    @onchange = "pegarMotoristas(this.value)",
+                                    @required = "required"
+                            })
+                            @Html.ValidationMessageFor(m => m.modelo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3" id="driver">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Motorista:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.idMotorista, new SelectList(string.Empty, "Value", "Text"), "Selecione o motorista", new
+                            {
+                                    @class = "form-control",
+                                    @id = "idMotorista",
+                                    @name = "idMotorista",
+                                    @style = "font-size: 12px"
+                            })
+                            @Html.ValidationMessageFor(m => m.idMotorista, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Duração:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.periodo, htmlAttributes: new { @class = "form-control", @onchange = "calcularValorAPagar()", @id = "periodo" })
+                            @Html.ValidationMessageFor(m => m.periodo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Unidade:", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownListFor(m => m.unidade, new SelectList(unidade, "Value", "Text"), "Selecione a unidade", new
+                            {
+                                    @class = "form-control",
+                                    @id = "idUnidade",
+                                    @name = "idUnidade",
+                                    @onchange = "calcularValorAPagar()",
+                                    @style = "font-size: 12px",
+                                    @required = "required"
+                            })
+                            @Html.ValidationMessageFor(m => m.unidade, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Total:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.valor, htmlAttributes: new { @class = "form-control", @id = "total", @name = "total", @disabled = "disabled" })
+                            @*<input type="text" id="total" name="total" class="form-control" disabled/>*@
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Data da Reserva:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.dataAluguer, htmlAttributes: new { @class = "form-control", @type="date" })
+                            @*<input type="text" id="total" name="total" class="form-control" disabled/>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <a href="@Url.Action("Reserva", "Aluguer")" class="btn btn-danger">Cancelar</a>
+                    <span class="text-light" style="float: right">  | </span>
+                    <button type="submit" class="btn btn-sm btn-outline-success">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    var price;
+    $(document).ready(function () {
+
+        document.getElementById('total').value = '0.00';
+
+        document.getElementById("clientname")
+            .addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("btn1").click();
+                }
+            });
+
+        $('#btn1').click(function () {
+            var client = document.getElementById("clientname").value;
+
+            if (client.length > 0) {
+
+                document.getElementById("alert1").style.display = "none";
+            }
+        });
+    });
+
+    function pesquisar() {
+
+        var client = document.getElementById("clientname").value;
+
+        if (client.length > 0) {
+            document.getElementById("editable").style.display = "none";
+
+            GetSearchClient();
+        }
+        else {
+            document.getElementById("alert1").style.display = "block";
+        }
+    }
+    function GetSearchClient() {
+
+
+        document.getElementById("search").style.display = "block";
+        var procemessage = "<option value='0'> Por favor aguarde...</option>";
+        $("#clientID").html(procemessage).show();
+        var url = "/Aluguer/PesquisarCliente/";
+        var _clientname = document.getElementById("clientname").value;
+
+        $.ajax({
+            url: url,
+            data: { nome: _clientname },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var markup = "<option value='0'>Selecione o cliente que pretende</option>";
+                for (var x = 0; x < data.length; x++) {
+                    markup += "<option value=" + data[x].Value + ">" + data[x].Text + "</option>";
+                }
+                $("#clientID").html(markup).show();
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function getClientData(_entityId) {
+
+        var url = "/Aluguer/PesquisarCliente/";
+
+        $.ajax({
+            url: url,
+            data: { nome: _entityId },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                document.getElementById("editable").style.display = "block";
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function pegarModelos(_marca) {
+        $.ajax({
+            url: "/Viaturas/CarregarModelosPelaMarca/",
+            data: { mrc: _marca },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var subcat = $('#idModelo');
+                subcat.empty();
+                subcat.append($("<option value='0'> Selecione o modelo </option>"));
+                $.each(data, function (index, element) {
+                    subcat.append($("<option value='" + element.Value + "'>" + element.Text + "</option>"));
+                });
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function pegarMotoristas(_resposta) {
+        if (_resposta == 'Sim') {
+            document.getElementById('driver').style.display = 'block';
+            document.getElementById('idMotorista').required = true;
+            let modelo = document.getElementById('idModelo').value;
+
+            populaListaDeMotoristas(modelo);
+        }
+        else {
+            var subcat = $('#idMotorista');
+            subcat.empty();
+            document.getElementById('driver').style.display = 'none';
+            document.getElementById('idMotorista').required = false;
+        }
+    }
+
+    function populaListaDeMotoristas(_viatura) {
+
+        $.ajax({
+            url: "/Aluguer/CarregarMotoristasViatura/",
+            data: { id: _viatura },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var subcat = $('#idMotorista');
+                subcat.empty();
+                subcat.append($("<option value='0'> Selecione o motorista </option>"));
+                $.each(data, function (index, element) {
+                    subcat.append($("<option value='" + element.Value + "'>" + element.Text + "</option>"));
+                });
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+
+        $.ajax({
+            url: "/Viaturas/CarregarValor/",
+            data: { id: _viatura },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                price = data;
+                document.getElementById('total').value = price;
+                calcularValorAPagar();
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+    function populaListaDeViaturas(_modelo) {
+
+        $.ajax({
+            url: "/Viaturas/CarregarViaturasPeloModelo/",
+            data: { modelo: _modelo },
+            cache: false,
+            type: "POST",
+            success: function (data) {
+                var subcat = $('#idMatricula');
+                subcat.empty();
+                subcat.append($("<option value='0'> Selecione a matricula </option>"));
+                $.each(data, function (index, element) {
+                    subcat.append($("<option value='" + element.Value + "'>" + element.Text + "</option>"));
+                });
+            },
+            error: function (reponse) {
+                alert("error : " + reponse);
+            }
+        });
+    }
+
+    function calcularValorAPagar() {
+
+        let duracao = document.getElementById('periodo').value,
+            unidade = document.getElementById('idUnidade').value;
+        if (duracao > 0)
+            if (unidade != '0') {
+                if (unidade == 'Dia')
+                    total = duracao * price;
+                if (unidade == 'Semana')
+                    total = duracao * 7 * price;
+                if (unidade == 'Mes')
+                    total = duracao * 30 * price;
+            }
+        document.getElementById('total').value = parseFloat(total).toFixed(2);
+    }
+</script>
