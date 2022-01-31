@@ -197,7 +197,7 @@
                     {
                         @* INDISPONIBILIZAR *@
                         <span class="text-light" style="float: right">  | </span>
-                        <a href="@Url.Action(actionName: "IndisponibilizarViatura", routeValues: new { matricula = "rowId" })"
+                        <a href="@Url.Action(actionName: "IndisponibilizarViatura", routeValues: new { m = "rowId" })"
                            style="float: right" title="Indisponibilizar"
                            class="btn btn-sm btn-outline-secondary" onclick="addParameter(this)">
                             Indisponibilizar
@@ -208,7 +208,7 @@
                     {
                         @* DISPONIBILIZAR *@
                         <span class="text-light" style="float: right">  | </span>
-                        <a href="@Url.Action(actionName: "DisponibilizarViatura", routeValues: new { matricula = "rowId" })"
+                        <a href="@Url.Action(actionName: "DisponibilizarViatura", routeValues: new { m = "rowId" })"
                            style="float: right" title="Disponibilizar"
                            class="btn btn-sm btn-outline-primary" onclick="addParameter(this)">
                             Disponibilizar
