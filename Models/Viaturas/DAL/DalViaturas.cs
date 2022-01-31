@@ -75,7 +75,8 @@ namespace RentAndDrive.Models.Viaturas.DAL
                     v.marca = viatura.marca;
                     v.modelo = viatura.modelo;
                     v.valorAluguer = viatura.valorAluguer;
-                    v.estado = viatura.estado;
+                    if(!v.estado.ToUpper().Equals("OCUPADO"))
+                        v.estado = viatura.estado;
                     ctx.SaveChanges();
                     return true;
                 }
