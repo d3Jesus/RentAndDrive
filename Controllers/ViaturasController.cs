@@ -95,6 +95,12 @@ namespace RentAndDrive.Controllers
                 return RedirectToAction(nameof(Index));
             }
             string estado = DalViaturas.Estado(m);
+            if (estado.ToUpper().Equals("OCUPADO"))
+            {
+                TempData["falha"] = "A viatura ainda se encontra em uso. Aguarde até que esta seja retornada e tente novamente!";
+                return RedirectToAction(nameof(Index));
+            }
+            
             if(estado.ToUpper().Equals("DISPONIVEL"))
                 TempData["falha"] = "A viatura já se encontra disponível para uso.";
             else
@@ -113,6 +119,12 @@ namespace RentAndDrive.Controllers
                 return RedirectToAction(nameof(Index));
             }
             string estado = DalViaturas.Estado(m);
+            if (estado.ToUpper().Equals("OCUPADO"))
+            {
+                TempData["falha"] = "A viatura ainda se encontra em uso. Aguarde até que esta seja retornada e tente novamente!";
+                return RedirectToAction(nameof(Index));
+            }
+
             if (estado.ToUpper().Equals("INDISPONIVEL"))
                 TempData["falha"] = "A viatura já se encontra indisponível para uso.";
             else

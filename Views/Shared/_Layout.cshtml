@@ -70,30 +70,55 @@
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
                         <li class="has-sub">
-                            <a class="js-arrow" href="@Url.Action("Dashboard","Home")">
+                            <a class="js-arrow" href="#">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
-                        </li>
-                        <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Parametriza&ccedil;&atilde;o
-                            </a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                @if (User.IsInRole("CONSULTAR_VIATURAS"))
-                                {
-                                    <li>
-                                        <a href="@Url.Action("Index","Viaturas")">
-                                            <i class="fas fa-car"></i> Viaturas
-                                        </a>
-                                    </li>
-                                }
                                 <li>
-                                    <a href="@Url.Action("Index","Motoristas")">
-                                        Motoristas
-                                    </a>
+                                    <a href="@Url.Action("Dashboard","Home")">Dashboard 1</a>
                                 </li>
+                                @{
+                                    if (Session["funcaoFuncionario"].ToString().ToUpper() != "RECEPCIONISTA")
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Dashboard2","Home")">Dashboard 2</a>
+                                        </li>
+                                    }
+                                }
+
                             </ul>
                         </li>
+
+                        @if (User.IsInRole("CONSULTAR_VIATURAS") || User.IsInRole("CONSULTAR_MOTORISTAS"))
+                        {
+                            <li class="has-sub">
+                                <a class="js-arrow" href="#">
+                                    <i class="fas fa-copy"></i>Parametriza&ccedil;&atilde;o
+                                </a>
+                                <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                    @{
+                                        if (User.IsInRole("CONSULTAR_VIATURAS"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Viaturas")">
+                                                    <i class="fas fa-car"></i> Viaturas
+                                                </a>
+                                            </li>
+                                        }
+
+                                        if (User.IsInRole("CONSULTAR_MOTORISTAS"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Motoristas")">
+                                                    Motoristas
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-dollar-sign"></i> Vendas
@@ -104,35 +129,53 @@
                                         <i class="fas fa-map-marker-alt"></i>Aluguer
                                     </a>
                                 </li>
-                                @*<li>
-                                    <a href="@Url.Action("AlguerActivo","Aluguer")">
-                                        <i class="fas fa-map-marker-alt"></i>Alugueres Activos
-                                    </a>
-                                </li>*@
+
                                 <li>
-                                    <a href="@Url.Action("Index","Clientes")">
-                                        <i class="fas fa-group"></i>Clientes
+                                    <a href="@Url.Action("Reserva","Aluguer")">
+                                        <i class="fas fa-map-marker-alt"></i>Reservas
                                     </a>
                                 </li>
+
+                                @if (User.IsInRole("CONSULTAR_CLIENTES"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index","Clientes")">
+                                            <i class="fas fa-group"></i>Clientes
+                                        </a>
+                                    </li>
+                                }
+
+
                             </ul>
                         </li>
-                        <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-dollar-sign"></i> Utilizadores e Funcion&aacute;rios
-                            </a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="@Url.Action("Index","Funcionarios")">
-                                        Funcion&aacute;rios
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Users")">
-                                        <i class="fas fa-user"></i>Usu&aacute;rios
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+
+                        @if (User.IsInRole("CONSULTAR_FUNCIONARIOS") || User.IsInRole("CONSULTAR_USUARIOS"))
+                        {
+                            <li class="has-sub">
+                                <a class="js-arrow" href="#">
+                                    <i class="fas fa-dollar-sign"></i> Utilizadores e Funcion&aacute;rios
+                                </a>
+                                <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                    @if (User.IsInRole("CONSULTAR_FUNCIONARIOS"))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index","Funcionarios")">
+                                                Funcion&aacute;rios
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("CONSULTAR_USUARIOS"))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index","Users")">
+
+                                                <i class="fas fa-user"></i>Usu&aacute;rios
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>
@@ -146,28 +189,56 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="active has-sub">
-                            <a class="js-arrow" href="@Url.Action("Dashboard","Home")">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard
-                            </a>
-                        </li>
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Parametriza&ccedil;&atilde;o
+                                <i class="fas fa-tachometer-alt"></i>Dashboard
                             </a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="@Url.Action("Index","Viaturas")">
-                                        <i class="fas fa-car"></i> Viaturas
-                                    </a>
+                                    <a href="@Url.Action("Dashboard","Home")">Dashboard 1</a>
                                 </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Motoristas")">
-                                        Motoristas
-                                    </a>
-                                </li>
+                                @{
+                                    if (Session["funcaoFuncionario"].ToString().ToUpper() != "RECEPCIONISTA")
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Dashboard2","Home")">Dashboard 2</a>
+                                        </li>
+                                    }
+
+
+                                }
                             </ul>
                         </li>
+
+                        @if (User.IsInRole("CONSULTAR_VIATURAS") || User.IsInRole("CONSULTAR_MOTORISTAS"))
+                        {
+                            <li class="has-sub">
+                                <a class="js-arrow" href="#">
+                                    <i class="fas fa-copy"></i>Parametriza&ccedil;&atilde;o
+                                </a>
+                                <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                    @{
+                                        if (User.IsInRole("CONSULTAR_VIATURAS"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Viaturas")">
+                                                    <i class="fas fa-car"></i> Viaturas
+                                                </a>
+                                            </li>
+                                        }
+                                        if (User.IsInRole("CONSULTAR_MOTORISTAS"))
+                                        {
+                                            <li>
+                                                <a href="@Url.Action("Index","Motoristas")">
+                                                    Motoristas
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </li>
+                        }
+
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
                                 <i class="fas fa-dollar-sign"></i> Vendas
@@ -178,35 +249,48 @@
                                         <i class="fas fa-map-marker-alt"></i>Aluguer
                                     </a>
                                 </li>
-                                @*<li>
-                                    <a href="@Url.Action("AlguerActivo","Aluguer")">
-                                        <i class="fas fa-map-marker-alt"></i>Alugueres Activos
-                                    </a>
-                                </li>*@
                                 <li>
-                                    <a href="@Url.Action("Index","Clientes")">
-                                        <i class="fas fa-group"></i>Clientes
+                                    <a href="@Url.Action("Reserva","Aluguer")">
+                                        <i class="fas fa-map-marker-alt"></i>Reservas
                                     </a>
                                 </li>
+                                @if (User.IsInRole("CONSULTAR_CLIENTES"))
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index","Clientes")">
+                                            <i class="fas fa-group"></i>Clientes
+                                        </a>
+                                    </li>
+                                }
                             </ul>
                         </li>
-                        <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-dollar-sign"></i> Utilizadores e Funcion&aacute;rios
-                            </a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="@Url.Action("Index","Funcionarios")">
-                                        Funcion&aacute;rios
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Users")">
-                                        <i class="fas fa-user"></i>Usu&aacute;rios
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+
+                        @if (User.IsInRole("CONSULTAR_FUNCIONARIOS") || User.IsInRole("CONSULTAR_USUARIOS"))
+                        {
+                            <li class="has-sub">
+                                <a class="js-arrow" href="#">
+                                    <i class="fas fa-dollar-sign"></i> Utilizadores e Funcion&aacute;rios
+                                </a>
+                                <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
+                                    @if (User.IsInRole("CONSULTAR_FUNCIONARIOS"))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index","Funcionarios")">
+                                                Funcion&aacute;rios
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (User.IsInRole("CONSULTAR_USUARIOS"))
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("Index","Users")">
+                                                <i class="fas fa-user"></i>Usu&aacute;rios
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
                     </ul>
                 </nav>
             </div>

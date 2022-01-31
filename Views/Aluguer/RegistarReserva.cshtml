@@ -1,34 +1,34 @@
 ﻿@using RentAndDrive.Models.Viaturas.Mdl
 @model RentAndDrive.Models.Alugueres.Mdl.VwAluguerReserva
 @{
-    ViewBag.Title = "Registar Aluguer";
+    ViewBag.Title = "Registar Reserva";
     List<ViaturaHelper> marcas = ViewData["Marcas"] as List<ViaturaHelper>;
     List<SelectListItem> motor = new List<SelectListItem>
-    {
+{
         new SelectListItem() { Text = "Sim", Selected = true, Value = "Sim"},
         new SelectListItem() { Text = "Não", Selected = false, Value = "Nao"}
     };
     List<SelectListItem> unidade = new List<SelectListItem>
-    {
+{
         new SelectListItem() { Text = "Dia(s)", Selected = false, Value = "Dia"},
         new SelectListItem() { Text = "Semana(s)", Selected = false, Value = "Semana"},
         new SelectListItem() { Text = "Mês(es)", Selected = false, Value = "Mes"}
     };
 
     List<SelectListItem> listaSexo = new List<SelectListItem>
-    {
+{
         new SelectListItem() { Text = "Masculino", Selected = true, Value = "Masculino"},
         new SelectListItem() { Text = "Feminino", Selected = false, Value = "Feminino"}
     };
     List<SelectListItem> listaEstadoCivil = new List<SelectListItem>
-    {
+{
         new SelectListItem() { Text = "Solteiro(a)", Selected = true, Value = "Solteiro"},
         new SelectListItem() { Text = "Casado(a)", Selected = false, Value = "Casado"},
         new SelectListItem() { Text = "Divorciado(a)", Selected = false, Value = "Divorciado"},
         new SelectListItem() { Text = "Viúvo(a)", Selected = false, Value = "Viúvo"}
     };
     List<SelectListItem> listaTipoIdent = new List<SelectListItem>
-    {
+{
         new SelectListItem() { Text = "BI", Selected = true, Value = "BI"},
         new SelectListItem() { Text = "Passaporte", Selected = false, Value = "Passaporte"},
         new SelectListItem() { Text = "DIRE", Selected = false, Value = "DIRE"}
@@ -72,19 +72,19 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item active">Vendas</li>
-        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Aluguer")">Aluguer</a></li>
+        <li class="breadcrumb-item"><a href="@Url.Action(controllerName: "Aluguer", actionName:"Reserva")">Reserva</a></li>
         <li class="breadcrumb-item active" aria-current="page">Registar</li>
     </ol>
 </nav>
 
-@using (Html.BeginForm("Registar", "Aluguer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("RegistarReserva", "Aluguer", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "Ocorreu um erro ao tentar registar o aluguer!. Corrija os erros e tente novamente")
 
     <div class="card card-nav-tabs card-plain">
         <div class="card-header card-header-danger">
-            Registar Aluguer
+            Registar Reserva
         </div>
         <div class="card-body">
             <div class="row">
@@ -221,7 +221,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
 
                 </div>
             </div>
@@ -330,9 +330,16 @@
                             @*<input type="text" id="total" name="total" class="form-control" disabled/>*@
                         </div>
                     </div>
+                    <div class="col-lg-3">
+                        <div class="form-group col-xs-6 col-md-6 col-lg-12">
+                            @Html.Label("Data da Reserva:", htmlAttributes: new { @class = "control-label" })
+                            @Html.TextBoxFor(m => m.dataAluguer, htmlAttributes: new { @class = "form-control", @type="date" })
+                            @*<input type="text" id="total" name="total" class="form-control" disabled/>*@
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
-                    <a href="@Url.Action("Index", "Aluguer")" class="btn btn-danger">Cancelar</a>
+                    <a href="@Url.Action("Reserva", "Aluguer")" class="btn btn-danger">Cancelar</a>
                     <span class="text-light" style="float: right">  | </span>
                     <button type="submit" class="btn btn-sm btn-outline-success">Salvar</button>
                 </div>

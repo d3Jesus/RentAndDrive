@@ -1,0 +1,341 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+    var tIn = TempData["Ini"] as string;
+    var tEnd = TempData["End"] as string;
+    var sucesso = TempData["sucesso"] as string;
+    var falha = TempData["falha"] as string;
+}
+
+
+<script>
+
+
+    $(document).ready(function () {
+        firstParameter()
+    })
+
+    function firstParameter() {
+        var _ano = document.getElementById("ano1").value;
+        $.ajax({
+            url: "/Home/FillBarChart/",
+            data: { ano: _ano },
+            success: function (data) {
+                secondParameter(data)
+            }
+        });
+    }
+
+    function secondParameter(_data) {
+        var _ano = document.getElementById("ano2").value;
+        $.ajax({
+            url: "/Home/FillBarChart/",
+            data: { ano: _ano },
+            success: function (data) {
+                fillChart(_data, data)
+            }
+        });
+    }
+
+    function fillChart(_d, d) {
+        try {
+            var ctx = document.getElementById("comparacao");
+            var context = ctx.getContext('2d');
+            context.clearRect(0, 0, ctx.width, ctx.height);
+            //bar chart
+            var _ano1 = document.getElementById("ano1").value;
+            var _ano2 = document.getElementById("ano2").value;
+            if (ctx) {
+                ctx.height = 100;
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    defaultFontFamily: 'Poppins',
+                    data: {
+                        labels: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+                        datasets: [
+                            {
+                                label: _ano1,
+                                data: [
+                                    _d[0].JAN,
+                                    _d[0].FEV,
+                                    _d[0].MAR,
+                                    _d[0].ABR,
+                                    _d[0].MAI,
+                                    _d[0].JUN,
+                                    _d[0].JUL,
+                                    _d[0].AGO,
+                                    _d[0].SET,
+                                    _d[0].OUT,
+                                    _d[0].NOV,
+                                    _d[0].DEZ
+                                ],
+                                borderColor: "rgba(0, 123, 255, 0.9)",
+                                borderWidth: "0",
+                                backgroundColor: "rgba(0, 123, 255, 0.5)",
+                                fontFamily: "Poppins"
+                            },
+                            {
+                                label: _ano2,
+                                data: [d[0].JAN, d[0].FEV, d[0].MAR, d[0].ABR, d[0].MAI, d[0].JUN, d[0].JUL, d[0].AGO, d[0].SET, d[0].OUT, d[0].NOV, d[0].DEZ],
+                                borderColor: "rgba(0,0,0,0.09)",
+                                borderWidth: "0",
+                                backgroundColor: "rgba(0,0,0,0.07)",
+                                fontFamily: "Poppins"
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: {
+                            position: 'top',
+                            labels: {
+                                fontFamily: 'Poppins'
+                            }
+
+                        },
+                        scales: {
+                            xAxes: [{
+                                ticks: {
+                                    fontFamily: "Poppins"
+
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    fontFamily: "Poppins"
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+</script>
+
+
+@if (sucesso != null)
+{
+    <div class="alert alert-success fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@sucesso</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+@if (falha != null)
+{
+    <div class="alert alert-danger fade show" role="alert">
+        <i class="zmdi zmdi-check-circle"></i>
+        <span class="content">@falha</span>
+        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="zmdi zmdi-close-circle"></i>
+            </span>
+        </button>
+    </div>
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="overview-wrap">
+                <h2 class="title-1">
+                    Visão geral
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-t-25">
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c1">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.ViaturasDispon</h2>
+                            <span>Viaturas Dispon&iacute;veis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c2">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="icon">
+                            <i class="zmdi zmdi-male-female"></i>
+                        </div>
+                        <div class="text">
+                            <h2>@ViewBag.Motoristas</h2>
+                            <span>Motoristas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c3">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalAluguer</h2>
+                            <span>Aluguer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c4">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="icon">
+                            <i class="zmdi zmdi-book"></i>
+                        </div>
+                        <div class="text">
+                            <h2>@ViewBag.TotalReserva</h2>
+                            <span>Reservas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-t-25">
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c1">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalFunc</h2>
+                            <span>Funcion&aacute;rios</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c2">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalViaturasAlugadas</h2>
+                            <span>Viaturas Alugadas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c3">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="icon">
+                            <i class="zmdi zmdi-calendar-note"></i>
+                        </div>
+                        <div class="text">
+                            <h2>@ViewBag.TotalClientes</h2>
+                            <span>Clientes</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c4">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalGanho Mt</h2>
+                            <span>Total Ganho</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row m-t-25">
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c1">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalAluguerCancelados</h2>
+                            <span>Aluguer Cancelados</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c2">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="text">
+                            <h2>@ViewBag.TotalReservasCanceladas</h2>
+                            <span>Reservas Canceladas</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="overview-item overview-item--c1">
+                <div class="overview__inner">
+                    <div class="overview-box clearfix">
+                        <div class="icon">
+                            <i class="zmdi zmdi-account-o"></i>
+                        </div>
+                        <div class="text">
+                            <h2>@ViewBag.TotalUsers</h2>
+                            <span>Utilizadores</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="au-card m-b-30">
+            <div class="au-card-inner">
+                <h3 class="title-2 m-b-40">
+                    Bar chart
+                </h3>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="number" min="2000" max="@DateTime.Now.Year" name="ano1" id="ano1" class="form-control" value="@ViewBag.Ano1">
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="number" min="2000" max="@DateTime.Now.Year" name="ano2" id="ano2" class="form-control" value="@ViewBag.Ano2">
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-sm btn-outline-info" id="go" onclick="firstParameter()">Go</button>
+                    </div>
+                </div>
+                <canvas id="comparacao"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="copyright">
+                <p>Copyright © @DateTime.Now.Year. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</div>
+

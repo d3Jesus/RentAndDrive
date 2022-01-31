@@ -17,6 +17,11 @@ namespace RentAndDrive.Models.Pessoas.DAL
             using (DataDbContext ctx = new DataDbContext())
                 return ctx.vwFuncionarios.ToList();
         }
+        public static List<VwFuncionario> CarregarMotoristas()
+        {
+            using (DataDbContext ctx = new DataDbContext())
+                return ctx.vwFuncionarios.Where(d => d.funcao == "Motorista").ToList();
+        }
         public static List<VwFuncionario> CarregarFuncionariosPelaFuncao(string funcao)
         {
             using (DataDbContext ctx = new DataDbContext())

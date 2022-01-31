@@ -21,6 +21,8 @@ namespace RentAndDrive.Models.Users.Mdl
         public string email { get; set; }
         [Column("DataRegisto")]
         public DateTime dataRegisto { get; set; }
+        [Column("Funcao")]
+        public string funcao { get; set; }
         [Column("Status")]
         public string estado { get; set; }
     }
